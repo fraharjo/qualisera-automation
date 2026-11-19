@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="Segoe UI" ss:Size="10" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="Header">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CCCCCC"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CCCCCC"/>
+   </Borders>
+   <Font ss:FontName="Segoe UI" ss:Size="11" ss:Color="#FFFFFF" ss:Bold="1"/>
+   <Interior ss:Color="#0D6EFD" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="DataCell">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E5E5E5"/>
+   </Borders>
+   <Font ss:FontName="Segoe UI" ss:Size="10"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Test Cases">
+  <Table>
+   <Column ss:Width="90"/>
+   <Column ss:Width="180"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="250"/>
+   <Column ss:Width="140"/>
+   <Column ss:Width="110"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="200"/>
+   <Column ss:Width="350"/>
+   <Column ss:Width="250"/>
+   <Row ss:Height="26">
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Test Case ID</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Module</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Requirement Key</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Scenario Title</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Test Type</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Priority</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Status</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Tags</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Steps (Gherkin)</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Expected Result</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">TC-KTK-001</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">Sample Feature Verification</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">@REQ-SMP-101</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">Successfully launch application and verify initial screen</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">Smoke / Critical Path</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">P0 (Smoke / Critical)</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">Automated</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">@feature-sample @REQ-SMP-101 @automated @smoke @android @positive @AC-01</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">Given the user launches the application | Then the main application container should be displayed</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="String">the main application container should be displayed</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>

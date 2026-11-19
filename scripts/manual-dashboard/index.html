@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qualisera Manual QA Execution & Results Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --card-hover: #242f42;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-subtle: #6b7280;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --neutral: #6b7280;
+      --accent: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .header-title h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      letter-spacing: -0.025em;
+    }
+    .badge-live {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    /* Session Info Bar */
+    .session-bar {
+      display: flex;
+      gap: 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.9rem 1.25rem;
+      margin-bottom: 1.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .session-field {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .session-field input {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: var(--text);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      min-width: 170px;
+    }
+    .session-field input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .session-meta-text {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Navigation Tabs */
+    .view-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(17, 24, 39, 0.8);
+      padding: 0.35rem;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Overall Progress Bar Card */
+    .progress-hero-card {
+      background: linear-gradient(135deg, #111827 0%, #162032 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .progress-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .progress-hero-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .progress-stats-headline {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+    }
+    .percent-number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .percent-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* Multi-segment Bar */
+    .segmented-progress-track {
+      width: 100%;
+      height: 18px;
+      background: #1f2937;
+      border-radius: 9999px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+      margin-bottom: 1rem;
+    }
+    .segment-bar {
+      height: 100%;
+      transition: width 0.4s ease;
+      position: relative;
+    }
+    .segment-bar.passed { background: var(--success); }
+    .segment-bar.failed { background: var(--danger); }
+    .segment-bar.blocked { background: var(--warning); }
+    .segment-bar.untested { background: #374151; }
+
+    /* Progress Legend */
+    .progress-legend {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Metric Cards Grid */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border-top, var(--card-border));
+    }
+    .metric-card.total { --border-top: var(--primary); }
+    .metric-card.passed { --border-top: var(--success); }
+    .metric-card.failed { --border-top: var(--danger); }
+    .metric-card.blocked { --border-top: var(--warning); }
+    .metric-card.untested { --border-top: var(--neutral); }
+    .metric-card.rate { --border-top: var(--accent); }
+
+    .metric-title { font-size: 0.825rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .metric-value { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; }
+    .metric-subtext { font-size: 0.75rem; color: var(--text-subtle); }
+
+    /* Results Summary Breakdown Grid */
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 900px) {
+      .breakdown-grid { grid-template-columns: 1fr; }
+    }
+    .breakdown-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .breakdown-header {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.75rem;
+    }
+    .breakdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .breakdown-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .breakdown-item-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .mini-progress-track {
+      width: 100%;
+      height: 8px;
+      background: #1f2937;
+      border-radius: 9999px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* Defect & Execution Table */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 0.75rem 0.85rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 0.75rem 0.85rem;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.6);
+      vertical-align: middle;
+    }
+    .data-badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Filters Bar */
+    .filters-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .search-input {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      min-width: 260px;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Test Case Card */
+    .cases-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .case-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.2s;
+    }
+    .case-card:hover {
+      border-color: #374151;
+      transform: translateY(-1px);
+    }
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    .case-title { font-size: 1.1rem; font-weight: 700; }
+    .case-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.35rem;
+    }
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      background: #1f2937;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .tag-priority { background: rgba(59, 130, 246, 0.15); color: var(--primary); border: 1px solid rgba(59, 130, 246, 0.2); }
+    .tag-ac { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+    .tag-module { background: rgba(139, 92, 246, 0.15); color: var(--accent); border: 1px solid rgba(139, 92, 246, 0.2); }
+
+    .steps-container {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.875rem;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      border-left: 3px solid var(--primary);
+    }
+    .step-line { margin-bottom: 0.4rem; color: #d1d5db; }
+    .step-line:last-child { margin-bottom: 0; }
+
+    /* Execution Form Grid */
+    .execution-box {
+      display: grid;
+      grid-template-columns: 160px 1fr 180px 180px 1fr;
+      gap: 0.85rem;
+      align-items: flex-start;
+      padding-top: 1rem;
+      border-top: 1px solid var(--card-border);
+    }
+    @media (max-width: 1200px) {
+      .execution-box { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 700px) {
+      .execution-box { grid-template-columns: 1fr; }
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .form-group label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    select, input[type="text"], input[type="datetime-local"] {
+      width: 100%;
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: var(--text);
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+    select:focus, input[type="text"]:focus, input[type="datetime-local"]:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-PASSED { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.4); }
+    .status-FAILED { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.4); }
+    .status-BLOCKED { background: rgba(245, 158, 11, 0.2); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .status-NOT_EXECUTED { background: rgba(107, 114, 128, 0.2); color: var(--neutral); border: 1px solid rgba(107, 114, 128, 0.3); }
+
+    .file-upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: #1f2937;
+      padding: 0.55rem 0.85rem;
+      border-radius: 8px;
+      border: 1px dashed #374151;
+      width: fit-content;
+    }
+    .file-upload-label input { display: none; }
+    .evidence-preview {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .evidence-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .evidence-thumb:hover { transform: scale(1.08); }
+
+    .btn {
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: #1f2937;
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+    .btn-secondary:hover { background: #374151; }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px dashed var(--card-border);
+    }
+
+    /* Toast Notification */
+    #toast {
+      visibility: hidden;
+      min-width: 280px;
+      background-color: #1f2937;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 1rem;
+      position: fixed;
+      z-index: 1000;
+      bottom: 30px;
+      right: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid var(--success);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    #toast.show {
+      visibility: visible;
+      animation: fadein 0.3s, fadeout 0.3s 2.7s;
+    }
+    @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+    @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <div class="header">
+    <div class="header-title">
+      <h1>📋 Qualisera Manual QA Execution & Results <span class="badge-live">LIVE SYNC</span></h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
+        Single Source of Truth from <code>features/**/*.feature</code> tagged with <code>@manual</code>
+      </p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="exportSummaryMarkdown()">📥 Export Summary</button>
+      <button class="btn btn-primary" onclick="saveAll()">💾 Save All Results</button>
+    </div>
+  </div>
+
+  <!-- Session Tracker Bar -->
+  <div class="session-bar">
+    <div class="session-field">
+      <label>👤 Active QA Tester:</label>
+      <input type="text" id="global-tester" placeholder="e.g. Fadli Raharjo" onchange="onGlobalTesterChange(this.value)">
+    </div>
+    <div class="session-field">
+      <label>📱 Test Device / OS:</label>
+      <input type="text" id="global-device" placeholder="e.g. Pixel 7 - Android 14" onchange="onGlobalDeviceChange(this.value)">
+    </div>
+    <div class="session-meta-text">
+      <span>🕒 Session Date: <strong id="session-date-display"></strong></span>
+    </div>
+  </div>
+
+  <!-- Navigation View Tabs -->
+  <div class="view-tabs">
+    <button class="tab-btn active" id="tab-overview-btn" onclick="switchTab('overview')">📊 Results & Progress Overview</button>
+    <button class="tab-btn" id="tab-checklist-btn" onclick="switchTab('checklist')">✍️ Execution Checklist</button>
+  </div>
+
+  <!-- Hero Testing Progress Card -->
+  <div class="progress-hero-card">
+    <div class="progress-hero-header">
+      <div>
+        <div class="progress-hero-title">🚀 Testing Execution Progress</div>
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">
+          Percentage of manual test scenarios executed and verified
+        </div>
+      </div>
+      <div class="progress-stats-headline">
+        <div>
+          <span class="percent-number" id="progress-percent" style="color: var(--primary);">0%</span>
+          <span class="percent-label">Executed</span>
+        </div>
+        <div>
+          <span class="percent-number" id="pass-rate-percent" style="color: var(--success);">0%</span>
+          <span class="percent-label">Pass Rate</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segmented Multi-Color Progress Bar -->
+    <div class="segmented-progress-track">
+      <div class="segment-bar passed" id="bar-passed" style="width: 0%;" title="Passed"></div>
+      <div class="segment-bar failed" id="bar-failed" style="width: 0%;" title="Failed"></div>
+      <div class="segment-bar blocked" id="bar-blocked" style="width: 0%;" title="Blocked"></div>
+      <div class="segment-bar untested" id="bar-untested" style="width: 100%;" title="Not Executed"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="progress-legend">
+      <div class="legend-item"><span class="legend-dot" style="background: var(--success);"></span> Passed: <strong id="legend-passed">0 (0%)</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background: var(--danger);"></span> Failed: <strong id="legend-failed">0 (0%)</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background: var(--warning);"></span> Blocked: <strong id="legend-blocked">0 (0%)</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background: #4b5563;"></span> Not Executed: <strong id="legend-untested">0 (100%)</strong></div>
+    </div>
+  </div>
+
+  <!-- Metric Statistics Cards -->
+  <div class="metrics">
+    <div class="metric-card total">
+      <span class="metric-title">Total Manual Cases</span>
+      <span class="metric-value" id="count-total">0</span>
+      <span class="metric-subtext">Registered via @manual</span>
+    </div>
+    <div class="metric-card passed">
+      <span class="metric-title">🟢 Passed</span>
+      <span class="metric-value" style="color: var(--success);" id="count-passed">0</span>
+      <span class="metric-subtext" id="subtext-passed">0% of total</span>
+    </div>
+    <div class="metric-card failed">
+      <span class="metric-title">🔴 Failed</span>
+      <span class="metric-value" style="color: var(--danger);" id="count-failed">0</span>
+      <span class="metric-subtext" id="subtext-failed">0% of total</span>
+    </div>
+    <div class="metric-card blocked">
+      <span class="metric-title">🟡 Blocked</span>
+      <span class="metric-value" style="color: var(--warning);" id="count-blocked">0</span>
+      <span class="metric-subtext" id="subtext-blocked">0% of total</span>
+    </div>
+    <div class="metric-card untested">
+      <span class="metric-title">⚪ Not Executed</span>
+      <span class="metric-value" style="color: var(--neutral);" id="count-untested">0</span>
+      <span class="metric-subtext" id="subtext-untested">100% remaining</span>
+    </div>
+    <div class="metric-card rate">
+      <span class="metric-title">🎯 Pass Rate</span>
+      <span class="metric-value" style="color: var(--accent);" id="count-rate">0%</span>
+      <span class="metric-subtext">Passed vs Executed</span>
+    </div>
+  </div>
+
+  <!-- TAB 1: OVERVIEW & BREAKDOWN VIEW -->
+  <div id="view-overview">
+    <div class="breakdown-grid">
+      <!-- Breakdown by Module -->
+      <div class="breakdown-card">
+        <div class="breakdown-header">
+          <span>📁 Progress by Application Module</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="module-count-badge">0 modules</span>
+        </div>
+        <div class="breakdown-list" id="module-breakdown-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Breakdown by Priority -->
+      <div class="breakdown-card">
+        <div class="breakdown-header">
+          <span>🏷️ Progress by Priority Level</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">P0 / P1 / P2</span>
+        </div>
+        <div class="breakdown-list" id="priority-breakdown-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Execution Log & Audit Trail -->
+    <div class="breakdown-card">
+      <div class="breakdown-header">
+        <span>🕒 Test Execution Log & Audit Trail (Executed By & Date)</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="executed-count-badge">0 executed cases</span>
+      </div>
+      <div class="table-responsive" id="execution-log-container">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Defect & Failed Cases Summary -->
+    <div class="breakdown-card">
+      <div class="breakdown-header">
+        <span>⚠️ Defects & Failed Scenarios Tracker</span>
+        <span style="font-size: 0.8rem; color: var(--danger);" id="defect-count-badge">0 flagged cases</span>
+      </div>
+      <div class="table-responsive" id="defects-container">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: EXECUTION CHECKLIST VIEW -->
+  <div id="view-checklist" style="display: none;">
+    <!-- Filters & Search Toolbar -->
+    <div class="filters-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterBy('ALL', this)">All Cases</button>
+        <button class="filter-btn" onclick="filterBy('NOT_EXECUTED', this)">Not Executed</button>
+        <button class="filter-btn" onclick="filterBy('PASSED', this)">Passed</button>
+        <button class="filter-btn" onclick="filterBy('FAILED', this)">Failed</button>
+        <button class="filter-btn" onclick="filterBy('BLOCKED', this)">Blocked</button>
+      </div>
+      <input type="text" class="search-input" id="search-box" placeholder="🔍 Search by title, module, tester, or step..." oninput="onSearch(this.value)">
+    </div>
+
+    <!-- List of Test Cases -->
+    <div class="cases-list" id="cases-container">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast">✅ Manual QA Results Saved Successfully!</div>
+
+  <script>
+    let testCases = [];
+    let activeFilter = 'ALL';
+    let searchQuery = '';
+    let currentTab = 'overview';
+
+    // Global session config in localStorage
+    const savedTester = localStorage.getItem('nexus_tester_name') || 'Fadli Raharjo';
+    const savedDevice = localStorage.getItem('nexus_tester_device') || 'Physical Android Device';
+
+    async function loadData() {
+      // Set session UI
+      document.getElementById('global-tester').value = savedTester;
+      document.getElementById('global-device').value = savedDevice;
+      document.getElementById('session-date-display').innerText = new Date().toLocaleDateString('en-US', {
+        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+      });
+
+      try {
+        const res = await fetch('/api/manual-cases');
+        testCases = await res.json();
+        updateAllDashboardMetrics();
+        renderChecklist();
+      } catch (err) {
+        console.error("Failed to load test cases:", err);
+      }
+    }
+
+    function onGlobalTesterChange(val) {
+      localStorage.setItem('nexus_tester_name', val.trim());
+    }
+
+    function onGlobalDeviceChange(val) {
+      localStorage.setItem('nexus_tester_device', val.trim());
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tab-overview-btn').classList.toggle('active', tab === 'overview');
+      document.getElementById('tab-checklist-btn').classList.toggle('active', tab === 'checklist');
+      document.getElementById('view-overview').style.display = tab === 'overview' ? 'block' : 'none';
+      document.getElementById('view-checklist').style.display = tab === 'checklist' ? 'block' : 'none';
+    }
+
+    function updateAllDashboardMetrics() {
+      const total = testCases.length;
+      const passed = testCases.filter(c => c.status === 'PASSED').length;
+      const failed = testCases.filter(c => c.status === 'FAILED').length;
+      const blocked = testCases.filter(c => c.status === 'BLOCKED').length;
+      const unexecuted = testCases.filter(c => !c.status || c.status === 'NOT_EXECUTED').length;
+      const executed = passed + failed + blocked;
+
+      // Percentages
+      const execPercent = total > 0 ? Math.round((executed / total) * 100) : 0;
+      const passRate = executed > 0 ? Math.round((passed / executed) * 100) : 0;
+
+      const pPassed = total > 0 ? ((passed / total) * 100).toFixed(1) : 0;
+      const pFailed = total > 0 ? ((failed / total) * 100).toFixed(1) : 0;
+      const pBlocked = total > 0 ? ((blocked / total) * 100).toFixed(1) : 0;
+      const pUntested = total > 0 ? ((unexecuted / total) * 100).toFixed(1) : 100;
+
+      // Headline Progress Numbers
+      document.getElementById('progress-percent').innerText = `${execPercent}%`;
+      document.getElementById('pass-rate-percent').innerText = `${passRate}%`;
+
+      // Segmented Progress Bar
+      document.getElementById('bar-passed').style.width = `${pPassed}%`;
+      document.getElementById('bar-failed').style.width = `${pFailed}%`;
+      document.getElementById('bar-blocked').style.width = `${pBlocked}%`;
+      document.getElementById('bar-untested').style.width = `${pUntested}%`;
+
+      // Legend
+      document.getElementById('legend-passed').innerText = `${passed} (${pPassed}%)`;
+      document.getElementById('legend-failed').innerText = `${failed} (${pFailed}%)`;
+      document.getElementById('legend-blocked').innerText = `${blocked} (${pBlocked}%)`;
+      document.getElementById('legend-untested').innerText = `${unexecuted} (${pUntested}%)`;
+
+      // Metric Cards
+      document.getElementById('count-total').innerText = total;
+      document.getElementById('count-passed').innerText = passed;
+      document.getElementById('subtext-passed').innerText = `${pPassed}% of total`;
+
+      document.getElementById('count-failed').innerText = failed;
+      document.getElementById('subtext-failed').innerText = `${pFailed}% of total`;
+
+      document.getElementById('count-blocked').innerText = blocked;
+      document.getElementById('subtext-blocked').innerText = `${pBlocked}% of total`;
+
+      document.getElementById('count-untested').innerText = unexecuted;
+      document.getElementById('subtext-untested').innerText = `${pUntested}% remaining`;
+
+      document.getElementById('count-rate').innerText = `${passRate}%`;
+
+      // Render Breakdowns & Audit Tables
+      renderModuleBreakdown();
+      renderPriorityBreakdown();
+      renderExecutionLog();
+      renderDefectsSummary();
+    }
+
+    function renderModuleBreakdown() {
+      const list = document.getElementById('module-breakdown-list');
+      const moduleMap = {};
+
+      testCases.forEach(tc => {
+        const m = tc.module || 'General';
+        if (!moduleMap[m]) moduleMap[m] = { total: 0, passed: 0, failed: 0, blocked: 0, unexecuted: 0 };
+        moduleMap[m].total++;
+        if (tc.status === 'PASSED') moduleMap[m].passed++;
+        else if (tc.status === 'FAILED') moduleMap[m].failed++;
+        else if (tc.status === 'BLOCKED') moduleMap[m].blocked++;
+        else moduleMap[m].unexecuted++;
+      });
+
+      const modules = Object.keys(moduleMap);
+      document.getElementById('module-count-badge').innerText = `${modules.length} modules`;
+
+      if (modules.length === 0) {
+        list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem;">No modules found.</div>`;
+        return;
+      }
+
+      list.innerHTML = modules.map(m => {
+        const d = moduleMap[m];
+        const executed = d.passed + d.failed + d.blocked;
+        const pct = Math.round((executed / d.total) * 100);
+        const passPct = (d.passed / d.total) * 100;
+        const failPct = (d.failed / d.total) * 100;
+        const blockPct = (d.blocked / d.total) * 100;
+        const unPct = (d.unexecuted / d.total) * 100;
+
+        return `
+          <div class="breakdown-item">
+            <div class="breakdown-item-header">
+              <span style="font-weight: 700; text-transform: capitalize;">📦 ${m}</span>
+              <span style="color: var(--text-muted);">${executed}/${d.total} (${pct}% done)</span>
+            </div>
+            <div class="mini-progress-track">
+              <div style="width: ${passPct}%; background: var(--success);"></div>
+              <div style="width: ${failPct}%; background: var(--danger);"></div>
+              <div style="width: ${blockPct}%; background: var(--warning);"></div>
+              <div style="width: ${unPct}%; background: #1f2937;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPriorityBreakdown() {
+      const list = document.getElementById('priority-breakdown-list');
+      const pMap = {
+        '@p0': { label: 'P0 - Smoke / Critical Path', total: 0, passed: 0, executed: 0 },
+        '@p1': { label: 'P1 - High / Regression Flow', total: 0, passed: 0, executed: 0 },
+        '@p2': { label: 'P2 - Edge-Case & Usability', total: 0, passed: 0, executed: 0 }
+      };
+
+      testCases.forEach(tc => {
+        const p = tc.priority && pMap[tc.priority] ? tc.priority : '@p1';
+        pMap[p].total++;
+        if (tc.status && tc.status !== 'NOT_EXECUTED') pMap[p].executed++;
+        if (tc.status === 'PASSED') pMap[p].passed++;
+      });
+
+      list.innerHTML = Object.keys(pMap).map(key => {
+        const d = pMap[key];
+        const pct = d.total > 0 ? Math.round((d.executed / d.total) * 100) : 0;
+
+        return `
+          <div class="breakdown-item">
+            <div class="breakdown-item-header">
+              <span><strong>${key}</strong>: ${d.label}</span>
+              <span style="color: var(--text-muted);">${d.executed}/${d.total} executed (${pct}%)</span>
+            </div>
+            <div class="mini-progress-track">
+              <div style="width: ${pct}%; background: var(--primary);"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderExecutionLog() {
+      const container = document.getElementById('execution-log-container');
+      const executed = testCases.filter(c => c.status && c.status !== 'NOT_EXECUTED');
+
+      document.getElementById('executed-count-badge').innerText = `${executed.length} of ${testCases.length} executed`;
+
+      if (executed.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem;">
+            No test executions recorded yet. Switch to the <strong>Execution Checklist</strong> tab to run tests.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Test Case ID</th>
+              <th>Module</th>
+              <th>Scenario Title</th>
+              <th>Executed By</th>
+              <th>Executed At</th>
+              <th>Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${executed.map(tc => `
+              <tr>
+                <td><span class="data-badge status-${tc.status}">${tc.status}</span></td>
+                <td><strong>${tc.id}</strong></td>
+                <td>${tc.module}</td>
+                <td>${escapeHtml(tc.title)}</td>
+                <td><strong>👤 ${escapeHtml(tc.executedBy || 'QA Tester')}</strong></td>
+                <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
+                  🕒 ${tc.executedAt || '-'}
+                </td>
+                <td>
+                  ${(tc.evidence && tc.evidence.length > 0) ? `<a href="${tc.evidence[0]}" target="_blank" style="color: var(--primary);">📷 View (${tc.evidence.length})</a>` : '<span style="color: var(--text-subtle);">-</span>'}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderDefectsSummary() {
+      const container = document.getElementById('defects-container');
+      const failed = testCases.filter(c => c.status === 'FAILED');
+      const blocked = testCases.filter(c => c.status === 'BLOCKED');
+      const issues = [...failed, ...blocked];
+
+      document.getElementById('defect-count-badge').innerText = `${issues.length} flagged case(s)`;
+
+      if (issues.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2rem; color: var(--success); font-weight: 600;">
+            🎉 All clear! No failed or blocked test cases recorded.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Test Case ID</th>
+              <th>Scenario Title</th>
+              <th>Executed By</th>
+              <th>Date / Time</th>
+              <th>Bug / Ticket Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${issues.map(tc => `
+              <tr>
+                <td><span class="data-badge status-${tc.status}">${tc.status}</span></td>
+                <td><strong>${tc.id}</strong></td>
+                <td>${escapeHtml(tc.title)}</td>
+                <td>👤 ${escapeHtml(tc.executedBy || 'QA Tester')}</td>
+                <td style="color: var(--text-muted); font-family: monospace; font-size: 0.8rem;">${tc.executedAt || '-'}</td>
+                <td>
+                  ${tc.bugLink ? `<a href="${tc.bugLink.startsWith('http') ? tc.bugLink : '#'}" target="_blank" style="color: var(--danger); font-weight: 700; text-decoration: underline;">🔗 ${escapeHtml(tc.bugLink)}</a>` : '<span style="color: var(--warning); font-size: 0.8rem;">⚠️ No ticket assigned</span>'}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function filterBy(status, btn) {
+      activeFilter = status;
+      document.querySelectorAll('.filter-group .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderChecklist();
+    }
+
+    function onSearch(query) {
+      searchQuery = query.toLowerCase().trim();
+      renderChecklist();
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('cases-container');
+      const filtered = testCases.filter(c => {
+        const s = c.status || 'NOT_EXECUTED';
+        if (activeFilter !== 'ALL' && s !== activeFilter) return false;
+        if (searchQuery) {
+          const matchTitle = c.title.toLowerCase().includes(searchQuery);
+          const matchModule = (c.module || '').toLowerCase().includes(searchQuery);
+          const matchTester = (c.executedBy || '').toLowerCase().includes(searchQuery);
+          const matchSteps = (c.steps || []).some(st => st.toLowerCase().includes(searchQuery));
+          return matchTitle || matchModule || matchTester || matchSteps;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>No manual test cases matching current filters</h3>
+            <p style="margin-top: 0.5rem;">Adjust search filters or mark scenarios with <code>@manual</code> in <code>features/**/*.feature</code>.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => `
+        <div class="case-card" id="card-${c.id}">
+          <div class="case-header">
+            <div>
+              <div class="case-title">${c.title}</div>
+              <div class="case-meta">
+                <span class="tag tag-module">📁 ${c.module}</span>
+                <span class="tag tag-priority">${c.priority || '@p2'}</span>
+                ${c.ac ? `<span class="tag tag-ac">${c.ac}</span>` : ''}
+                ${c.jira ? `<span class="tag">${c.jira}</span>` : ''}
+                <span class="tag">ID: ${c.id}</span>
+              </div>
+            </div>
+            <div class="status-badge status-${c.status || 'NOT_EXECUTED'}" id="badge-${c.id}">
+              ${c.status || 'NOT_EXECUTED'}
+            </div>
+          </div>
+
+          <div class="steps-container">
+            ${c.steps.map(s => `<div class="step-line">${escapeHtml(s)}</div>`).join('')}
+          </div>
+
+          <div class="execution-box">
+            <div class="form-group">
+              <label>Execution Status</label>
+              <select onchange="onStatusChange('${c.id}', this.value)">
+                <option value="NOT_EXECUTED" ${(!c.status || c.status === 'NOT_EXECUTED') ? 'selected' : ''}>⚪ Not Executed</option>
+                <option value="PASSED" ${c.status === 'PASSED' ? 'selected' : ''}>🟢 Passed</option>
+                <option value="FAILED" ${c.status === 'FAILED' ? 'selected' : ''}>🔴 Failed</option>
+                <option value="BLOCKED" ${c.status === 'BLOCKED' ? 'selected' : ''}>🟡 Blocked</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Bug / Jira Link</label>
+              <input type="text" placeholder="e.g. KTK-BUG-102 or Jira URL" value="${c.bugLink || ''}" onchange="onBugChange('${c.id}', this.value)" />
+            </div>
+
+            <div class="form-group">
+              <label>Executed By</label>
+              <input type="text" id="tester-${c.id}" placeholder="Tester name" value="${c.executedBy || ''}" onchange="onExecutedByChange('${c.id}', this.value)" />
+            </div>
+
+            <div class="form-group">
+              <label>Execution Date / Time</label>
+              <input type="text" id="date-${c.id}" placeholder="YYYY-MM-DD HH:mm:ss" value="${c.executedAt || ''}" onchange="onExecutedAtChange('${c.id}', this.value)" />
+            </div>
+
+            <div class="form-group">
+              <label>Evidence</label>
+              <label class="file-upload-label">
+                📷 <span>Upload screenshot...</span>
+                <input type="file" accept="image/*" onchange="uploadEvidence('${c.id}', this.files[0])" />
+              </label>
+              <div class="evidence-preview" id="evidence-${c.id}">
+                ${(c.evidence || []).map(url => `<a href="${url}" target="_blank"><img class="evidence-thumb" src="${url}" title="View Evidence" /></a>`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function onStatusChange(id, val) {
+      const tc = testCases.find(c => c.id === id);
+      if (tc) {
+        tc.status = val;
+
+        if (val !== 'NOT_EXECUTED') {
+          // Auto-fill tester name if empty
+          const activeTester = document.getElementById('global-tester').value.trim() || 'QA Tester';
+          if (!tc.executedBy) {
+            tc.executedBy = activeTester;
+            const inputTester = document.getElementById(`tester-${id}`);
+            if (inputTester) inputTester.value = tc.executedBy;
+          }
+
+          // Auto-stamp execution date
+          const nowStr = formatTimestamp(new Date());
+          tc.executedAt = nowStr;
+          const inputDate = document.getElementById(`date-${id}`);
+          if (inputDate) inputDate.value = tc.executedAt;
+        } else {
+          tc.executedBy = '';
+          tc.executedAt = '';
+          const inputTester = document.getElementById(`tester-${id}`);
+          if (inputTester) inputTester.value = '';
+          const inputDate = document.getElementById(`date-${id}`);
+          if (inputDate) inputDate.value = '';
+        }
+
+        const badge = document.getElementById(`badge-${id}`);
+        if (badge) {
+          badge.className = `status-badge status-${val}`;
+          badge.innerText = val;
+        }
+
+        updateAllDashboardMetrics();
+      }
+    }
+
+    function onExecutedByChange(id, val) {
+      const tc = testCases.find(c => c.id === id);
+      if (tc) {
+        tc.executedBy = val.trim();
+        updateAllDashboardMetrics();
+      }
+    }
+
+    function onExecutedAtChange(id, val) {
+      const tc = testCases.find(c => c.id === id);
+      if (tc) {
+        tc.executedAt = val.trim();
+        updateAllDashboardMetrics();
+      }
+    }
+
+    function onBugChange(id, val) {
+      const tc = testCases.find(c => c.id === id);
+      if (tc) {
+        tc.bugLink = val.trim();
+        renderDefectsSummary();
+      }
+    }
+
+    async function uploadEvidence(id, file) {
+      if (!file) return;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('caseId', id);
+
+      try {
+        const res = await fetch('/api/upload-evidence', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        const tc = testCases.find(c => c.id === id);
+        if (tc) {
+          tc.evidence = tc.evidence || [];
+          tc.evidence.push(data.url);
+          renderChecklist();
+          showToast('📷 Screenshot evidence uploaded successfully!');
+        }
+      } catch (err) {
+        alert("Failed to upload evidence");
+      }
+    }
+
+    async function saveAll() {
+      try {
+        const res = await fetch('/api/save-results', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(testCases)
+        });
+        if (res.ok) {
+          showToast('💾 All Manual Execution Results Saved Successfully!');
+        }
+      } catch (err) {
+        alert('❌ Failed to save results: ' + err.message);
+      }
+    }
+
+    function exportSummaryMarkdown() {
+      const activeTester = document.getElementById('global-tester').value.trim() || 'QA Tester';
+      const activeDevice = document.getElementById('global-device').value.trim() || 'Android Device';
+
+      const total = testCases.length;
+      const passed = testCases.filter(c => c.status === 'PASSED').length;
+      const failed = testCases.filter(c => c.status === 'FAILED').length;
+      const blocked = testCases.filter(c => c.status === 'BLOCKED').length;
+      const unexecuted = testCases.filter(c => !c.status || c.status === 'NOT_EXECUTED').length;
+      const executed = passed + failed + blocked;
+      const execPercent = total > 0 ? Math.round((executed / total) * 100) : 0;
+      const passRate = executed > 0 ? Math.round((passed / executed) * 100) : 0;
+
+      let md = `# Manual Test Execution Summary Report\n\n`;
+      md += `* **Report Generated At:** ${formatTimestamp(new Date())}\n`;
+      md += `* **Primary QA Tester:** ${activeTester}\n`;
+      md += `* **Testing Environment:** ${activeDevice}\n`;
+      md += `* **Execution Progress:** **${execPercent}%** (${executed}/${total} test cases)\n`;
+      md += `* **Pass Rate:** **${passRate}%**\n\n`;
+
+      md += `## 1. Metrics Overview\n\n`;
+      md += `| Execution Status | Count | Percentage |\n`;
+      md += `| :--- | :---: | :---: |\n`;
+      md += `| 🟢 Passed | **${passed}** | ${total > 0 ? ((passed / total) * 100).toFixed(1) : 0}% |\n`;
+      md += `| 🔴 Failed | **${failed}** | ${total > 0 ? ((failed / total) * 100).toFixed(1) : 0}% |\n`;
+      md += `| 🟡 Blocked | **${blocked}** | ${total > 0 ? ((blocked / total) * 100).toFixed(1) : 0}% |\n`;
+      md += `| ⚪ Not Executed | **${unexecuted}** | ${total > 0 ? ((unexecuted / total) * 100).toFixed(1) : 0}% |\n\n`;
+
+      md += `## 2. Detailed Execution Log (Audit Trail)\n\n`;
+      md += `| Test Case ID | Module | Scenario Title | Priority | Status | Executed By | Execution Date | Bug Link |\n`;
+      md += `| :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- |\n`;
+      testCases.forEach(tc => {
+        md += `| \`${tc.id}\` | ${tc.module} | ${tc.title} | ${tc.priority || '@p2'} | **${tc.status || 'NOT_EXECUTED'}** | ${tc.executedBy || '-'} | ${tc.executedAt || '-'} | ${tc.bugLink || '-'} |\n`;
+      });
+
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `manual-qa-report-${Date.now()}.md`;
+      a.click();
+      showToast('📥 Report summary exported to Markdown!');
+    }
+
+    function formatTimestamp(d) {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.className = 'show';
+      setTimeout(() => { t.className = t.className.replace('show', ''); }, 3000);
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

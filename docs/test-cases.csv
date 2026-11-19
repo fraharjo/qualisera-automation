@@ -1,0 +1,2 @@
+﻿Test Case ID,Module,Requirement Key,Scenario Title,Test Type,Priority,Automation Status,Tags,Test Steps,Expected Result
+TC-KTK-001,"Sample Feature Verification",@REQ-SMP-101,"Successfully launch application and verify initial screen","Smoke / Critical Path","P0 (Smoke / Critical)",Automated,"@feature-sample @REQ-SMP-101 @automated @smoke @android @positive @AC-01","Given the user launches the application -> Then the main application container should be displayed","the main application container should be displayed"
