@@ -1,0 +1,11 @@
+{
+  "defaultItem": "Sample Item",
+  "categories": [
+    "Category A",
+    "Category B"
+  ],
+  "searchKeywords": {
+    "valid": "Sample",
+    "empty": "NonExistentItem999"
+  }
+}

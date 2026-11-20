@@ -42,6 +42,18 @@ export class BaseScreen {
   }
 
   /**
+   * Smart Contract Locator for Shift-Left & Unfinished Features:
+   * Maps to [data-testid="id"] for Web, and ~id for Mobile (Android content-desc / iOS accessibilityIdentifier).
+   * Connects QA testability requests directly with developer components.
+   */
+  contract(elementId: string) {
+    if (browser.isMobile) {
+      return $(`~${elementId}`);
+    }
+    return $(`[data-testid="${elementId}"], [name="${elementId}"], #${elementId}`);
+  }
+
+  /**
    * Enterprise i18n Locator Engine:
    * Resolves elements across any active language variant (EN, ID, etc.)
    * by matching both @content-desc (Accessibility ID) and visible @text.

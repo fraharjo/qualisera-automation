@@ -1,10 +1,35 @@
+# Dependencies
 node_modules/
+
+# Environment Variables & Secrets (NEVER COMMIT)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+credentials.json
+auth.json
+tokens.json
+
+# Test Reports, Artifacts & Screenshots
 reports/allure-results/
 reports/allure-report/
 reports/manual-results/evidence/
+reports/*.log
+*.log
+
+# Mobile App Binaries (Keep repo lightweight and protect IP)
 apps/*.apk
+apps/*.aab
 apps/*.ipa
 apps/*.app
-.env
+
+# OS & Editor
 .DS_Store
-*.log
+Thumbs.db
+.idea/
+.vscode/

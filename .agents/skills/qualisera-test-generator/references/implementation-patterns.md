@@ -2,30 +2,43 @@
 
 Contents: selector conventions, BaseScreen pattern, i18n architecture, mobile-specific coverage notes, few-shot example, validation commands.
 
-## Selector conventions
+## Selector conventions & Smart Contracts
 
-Never guess selectors. Priority of sources: (1) real UI dump (`adb shell uiautomator dump`, Appium Inspector, browser devtools), (2) agreed naming convention, (3) stub marked `// TODO: verify with dev (no UI dump available)`.
-
-Naming convention when unverified: `<screen>-<element>-<type>`, e.g. `login-email-input`, `box-create-btn`, `dashboard-header-txt`, `settings-language-radio`.
-
-| Platform | Matches |
-| :--- | :--- |
-| Android | `content-desc` (accessibility id) or `text` |
-| iOS | `accessibilityIdentifier` or `label` |
-| Web | `data-testid`, `id`, CSS |
-
-UI dump (when an APK is in `apps/`):
-```bash
-~/Library/Android/sdk/build-tools/36.0.0/aapt dump badging apps/<app>.apk | grep -E "package: name|launchable-activity"
-adb shell uiautomator dump /sdcard/window_dump.xml && adb pull /sdcard/window_dump.xml /tmp/window_dump.xml
-```
-Extract real `content-desc`, `resource-id`, `text` from the XML.
+Never guess selectors. Priority of sources:
+1. Real UI dump or live DOM inspection (`adb shell uiautomator dump`, Appium Inspector, browser DevTools).
+2. For pending, unfinished, or shift-left features: wrap with `this.contract('<screen>-<element>-<type>')`.
+   - On Web: matches `[data-testid="<id>"]`, `[name="<id>"]`, `#<id>`.
+   - On Mobile: matches `~<id>` (accessibility ID).
+   - This prevents brittle XPath guessing and gives developers a clear testability contract to implement.
 
 ## BaseScreen pattern (`shared/pages/base.screen.ts`)
 
 ```typescript
-get btnSubmit() { return this.getSelector('#submit-btn', 'login-submit-btn'); } // web, mobile
-get headerDashboard() { return this.getByI18n(i18n.dashboard.header); }        // language-resilient
+// Live element (verified):
+get btnSubmit() { return this.getSelector('#submit-btn', 'login-submit-btn'); }
+get headerDashboard() { return this.getByI18n(i18n.dashboard.header); }
+
+// Unfinished / Shift-left element (Smart Contract):
+get alertError() { return this.contract('login-error-alert'); }
+get btnGoogleAuth() { return this.contract('login-google-btn'); }
+```
+
+## Universal Test Data Hub (`shared/data`)
+
+Use a single facade to access credentials, static fixtures, and dynamic factory data across Web, Android, and iOS:
+
+```typescript
+import { testData } from '../../../shared/data';
+
+// 1. Secrets & Credentials (from .env via shared/config/env.config.ts)
+const user = testData.env.credentials.standardUser;
+
+// 2. Static Master Data (from shared/data/fixtures/<name>.json)
+const catalog = testData.fixture('product-catalog');
+
+// 3. Dynamic Conflict-Free Data (bulk users, unique phone/email, addresses)
+const newUser = testData.factory.user();
+const newAddress = testData.factory.address();
 ```
 
 ## i18n architecture
