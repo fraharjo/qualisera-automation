@@ -18,7 +18,7 @@ interface ManualTestCase {
   executedAt?: string;
 }
 
-const PORT = 3000;
+const PORT = parseInt(process.env.MANUAL_DASHBOARD_PORT || '3000', 10);
 const FEATURES_DIR = path.join(__dirname, '../../features');
 const RESULTS_DIR = path.join(__dirname, '../../reports/manual-results');
 const RESULTS_FILE = path.join(RESULTS_DIR, 'manual-execution-results.json');
