@@ -128,23 +128,15 @@ export const config: Options.Testrunner = {
           clearTimeout(timeout);
           if (code === 0) {
             console.log('[WDIO] Allure report successfully generated at ./reports/allure-report');
+            console.log('[WDIO] 👉 To view the interactive report dashboard, run: npm run report:open\n');
           } else {
             console.warn(`[WDIO] Allure generation exited with code: ${code}`);
           }
           resolve();
         });
       });
-
-      if (!process.env.CI) {
-        console.log('[WDIO] Automatically opening Allure Report in browser...');
-        const child = spawn('npx', ['allure', 'open', './reports/allure-report'], {
-          detached: true,
-          stdio: 'ignore'
-        });
-        child.unref();
-      }
     } catch (err) {
-      console.error('[WDIO] Failed to auto-generate/open Allure report:', err);
+      console.error('[WDIO] Failed to auto-generate Allure report:', err);
     }
   }
 };
