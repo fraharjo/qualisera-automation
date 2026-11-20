@@ -1,3 +1,5 @@
+import { $, browser } from '@wdio/globals';
+
 /**
  * Base Screen Object containing common utilities for both Web and Mobile
  * Includes Enterprise Multi-Language (i18n) Resilient Locator Engine

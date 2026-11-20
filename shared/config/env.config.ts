@@ -51,6 +51,23 @@ export const ENV = {
   appium: {
     host: process.env.APPIUM_HOST || '127.0.0.1',
     port: parseInt(process.env.APPIUM_PORT || '4723', 10)
+  },
+
+  // ==========================================
+  // 📧 Email Reporter (SMTP) Configuration
+  // ==========================================
+  email: {
+    enabled: process.env.EMAIL_REPORT_ENABLED === 'true',
+    triggerPolicy: (process.env.EMAIL_TRIGGER_POLICY as 'manual' | 'on_failure' | 'ci_only' | 'always') || 'manual',
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587', 10),
+    secure: process.env.SMTP_SECURE === 'true',
+    user: process.env.SMTP_USER || '',
+    pass: process.env.SMTP_PASS || '',
+    from: process.env.SMTP_FROM || '"Qualisera QA Automation" <no-reply@qualisera.com>',
+    to: process.env.EMAIL_TO || '',
+    subject: process.env.EMAIL_SUBJECT || '',
+    dashboardUrl: process.env.REPORT_DASHBOARD_URL || ''
   }
 };
 

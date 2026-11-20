@@ -22,6 +22,7 @@
   "include": [
     "shared/**/*.ts",
     "features/**/*.ts",
+    "generated/**/*.ts",
     "wdio.*.conf.ts"
   ]
 }

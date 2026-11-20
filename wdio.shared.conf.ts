@@ -128,7 +128,33 @@ export const config: Options.Testrunner = {
           clearTimeout(timeout);
           if (code === 0) {
             console.log('[WDIO] Allure report successfully generated at ./reports/allure-report');
-            console.log('[WDIO] 👉 To view the interactive report dashboard, run: npm run report:open\n');
+            console.log('[WDIO] 👉 To view the interactive report dashboard, run: npm run report:open');
+            console.log('\n💡 [Qualisera Tip] Want to dispatch this test report to your team?');
+            console.log('   • Run: npm run report:email');
+            console.log('   • Configure settings interactively: npm run setup:email\n');
+
+            // Auto-dispatch email if policy conditions are met
+            const { ENV } = require('./shared/config/env.config');
+            if (ENV.email.enabled) {
+              const policy = ENV.email.triggerPolicy || 'manual';
+              const isCi = process.env.CI === 'true';
+              const hasFailure = results && (results.failed > 0);
+
+              let shouldSend = false;
+              if (policy === 'always') shouldSend = true;
+              else if (policy === 'ci_only' && isCi) shouldSend = true;
+              else if (policy === 'on_failure' && hasFailure) shouldSend = true;
+
+              if (shouldSend) {
+                console.log(`[WDIO] 📧 Auto-dispatching email report per policy (${policy})...`);
+                const { execSync } = require('child_process');
+                try {
+                  execSync('npx ts-node scripts/send-email-report.ts', { stdio: 'inherit' });
+                } catch (e: any) {
+                  console.warn('[WDIO] Email auto-dispatch encountered an error:', e.message);
+                }
+              }
+            }
           } else {
             console.warn(`[WDIO] Allure generation exited with code: ${code}`);
           }

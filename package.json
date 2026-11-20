@@ -16,6 +16,9 @@
     "appium:setup": "appium driver install uiautomator2",
     "report:generate": "allure generate ./reports/allure-results --clean -o ./reports/allure-report",
     "report:open": "allure open ./reports/allure-report",
+    "report:email": "ts-node scripts/send-email-report.ts",
+    "report:email:preview": "ts-node scripts/send-email-report.ts --dry-run",
+    "setup:email": "ts-node scripts/setup-email.ts",
     "report": "npm run report:generate && npm run report:open"
   },
   "keywords": [
@@ -35,6 +38,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "@types/nodemailer": "^8.0.2",
     "@wdio/allure-reporter": "^8.32.0",
     "@wdio/appium-service": "^8.32.0",
     "@wdio/cli": "^8.32.0",
@@ -45,6 +49,7 @@
     "appium": "^2.5.0",
     "appium-uiautomator2-driver": "^3.0.0",
     "dotenv": "^16.4.5",
+    "nodemailer": "^10.6.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
