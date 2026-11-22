@@ -48,6 +48,20 @@ const newAddress = testData.factory.address();
 3. React Native inputs: chain `click()`, `clearValue()`, `setValue('')` when resetting.
 4. Handle native `AlertDialog` (e.g. "Name required") before asserting form state.
 
+## Assertion Strategy: Outcome Verification vs Mere Presence
+
+Always assert actual business outcome, state changes, or exact copy. Never write weak assertions that pass on empty/wrong states:
+
+```typescript
+// ❌ WEAK (Checks existence only - passes even if message is blank or displays an error!)
+await expect(paymentScreen.alertNotice).toBeDisplayed();
+
+// ✅ ROBUST (Verifies specific business outcome, content, and state)
+await expect(paymentScreen.alertNotice).toBeDisplayed();
+await expect(paymentScreen.alertNotice).toHaveText(expect.stringContaining('Transfer Berhasil'));
+await expect(paymentScreen.txtRemainingBalance).toHaveText(expect.stringContaining('Rp 40.000'));
+```
+
 ## Mobile coverage notes (map to the quality checklist)
 
 - Idempotency: double tap on submit/pay -> processed once (`@p2 @automated`).

@@ -58,19 +58,33 @@ Per AC, list Positive / Negative / Edge scenarios regardless of automation feasi
 Design Rigor Rules:
 1. **Deterministic Single Expected Result**:
    - Every scenario must have exactly one specific, verifiable expected outcome. Never write ambiguous outcomes like "Tombol nonaktif / Alert".
-2. **Complete Decision Tables**:
+2. **Assertion Strategy: Verify Outcome, Not Mere Presence**:
+   - Assertions MUST verify actual content, business value, or state outcome (e.g., `expect(msg.getText()).toEqual('Transaksi berhasil')`, balance deductions, status badge changes).
+   - NEVER rely solely on element presence or visibility (`toBeDisplayed()`). An element can be visible but contain empty text, wrong data, or error banners in a success container.
+3. **Four Pillars of Transaction & Payment Testing**:
+   - For every transaction, checkout, transfer, or billing flow, always mandate four core scenarios:
+     1. *Full End-to-End Path*: `Initiate -> Process -> Success Confirmation`.
+     2. *Idempotency Check*: Rapid retry or double-submit must process exactly once (zero double charges).
+     3. *Rollback & Abort*: Network failure or user cancellation mid-flight restores balance/state without orphan records.
+     4. *Authorization & IDOR Guard*: User A cannot view, approve, or pay transactions belonging to User B.
+4. **"Sense of QA" - Probing the Gaps Between Spec and Reality**:
+   - Requirements often describe ideal flows. Actively explore the unwritten gaps:
+     - *Payload & File Bounds*: Max limit (e.g. 50MB file upload), 0-byte file, unsupported extensions.
+     - *Character & Encoding*: Field input with emojis, leading/trailing whitespace, pure symbols.
+     - *Interruption & Resilience*: Network drop mid-upload or mid-payment, app sent to background during processing.
+5. **Complete Decision Tables**:
    - When conditions interact (e.g., balance × amount × PIN), enumerate all $2^n$ combinations. Explicitly mark infeasible or collapsed rows with reasons.
-3. **Rigorous BVA & EP Coverage**:
+6. **Rigorous BVA & EP Coverage**:
    - Numerical & Financial inputs: 0, negative, decimals, non-numeric, empty.
    - Fee and balance interactions: `balance = amount` (valid), `balance = amount - 1` (invalid), `balance = amount + fee`.
    - Time boundaries: `14:59` (still locked) vs `15:00` (unlocked).
    - Input maxLength in Mobile: On native mobile inputs (Appium), `maxLength` silently truncates input. Assert that the field value length equals the max limit (e.g., 50 chars), rather than waiting for an error alert that never appears.
-4. **State Transition Rigor**:
+7. **State Transition Rigor**:
    - To verify an account lockout state, the test MUST attempt login with the **correct password** to prove the lock is actually enforced (testing a wrong password during lockout proves nothing).
    - Verify failure counter reset conditions (e.g., resets upon 1 successful login before reaching limit).
-5. **Security & Information Leakage**:
+8. **Security & Information Leakage**:
    - Error messages must be generic (e.g., "Invalid email or password") to prevent user/account enumeration.
-6. **Non-Functional & Reliability (ISO 25010)**:
+9. **Non-Functional & Reliability (ISO 25010)**:
    - Always include network interruption (disconnect mid-action), concurrency/double-tap idempotency, and app backgrounding/resuming.
 
 Pool columns: ID (`BOX-P01`, `BOX-N03`, `BOX-E05`), AC, bucket, technique, description, risk (H/M/L), why it matters. Cut only exact duplicates here.

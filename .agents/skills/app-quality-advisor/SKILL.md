@@ -119,7 +119,18 @@ Platform-neutral guidance first (e.g. inline validation with helper text, snackb
 
 ### Section 4: Chat draft (Teams, Slack, WhatsApp)
 
-Friendly and collaborative. Open with what works well, then the top items by severity, with a clear ask. Structure: greeting, what works well, numbered top items with severity, ask or next step. Keep it short enough to read on a phone. Written to a developer who made the app, not to a team being blamed. Use the user's language.
+Friendly, collaborative, and non-defensive. Apply proven QA feedback principles:
+- **Use "I" Perspective over "You" Accusation**: Say *"Saya agak bingung saat input bernilai null, behavior-nya seperti apa ya?"* instead of *"Kamu kurang handle edge case"*. This invites healthy technical discussion instead of triggering defensive pushback.
+- **Categorize Feedback Clearly**: Group items into three distinct labels so developers know exact expectations:
+  1. `[BLOCKING]` *(Must Fix)*: Functional defect or blocker with clear business risk.
+  2. `[SUGGESTION]` *(Optional)*: Usability enhancement idea; propose options and let developers decide.
+  3. `[NITPICK]` *(Cosmetic)*: Small visual/copy polish; should never block releases or PR merges.
+
+Structure:
+1. Warm greeting and appreciation of what works well.
+2. Bulleted top items using `[BLOCKING]`, `[SUGGESTION]`, or `[NITPICK]`.
+3. Clear, low-friction next step (e.g. "Bisa kita diskusikan santai 5 menit?").
+4. Keep it concise enough to read comfortably on a mobile phone.
 
 ### Section 5: Issue draft (Jira, GitHub Issues, or similar)
 
