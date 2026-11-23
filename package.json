@@ -11,6 +11,8 @@
     "test:feature:sample": "wdio run wdio.android.conf.ts --cucumberOpts.tags=\"@feature-sample and @automated and @android and not @blocked\"",
     "test:manual:dashboard": "ts-node scripts/manual-dashboard/server.ts",
     "lint:tags": "ts-node scripts/lint-tags.ts",
+    "eval:init": "node scripts/eval-skill.mjs init",
+    "eval:score": "node scripts/eval-skill.mjs",
     "typecheck": "tsc --noEmit",
     "docs:generate": "ts-node scripts/generate-docs.ts",
     "appium:setup": "appium driver install uiautomator2",

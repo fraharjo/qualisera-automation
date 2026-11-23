@@ -48,6 +48,15 @@ Key Rules:
 ### Phase 3 - Ideate the scenario pool
 Per AC, list Positive / Negative / Edge scenarios regardless of automation feasibility. Use [references/test-design-techniques.md](references/test-design-techniques.md) (EP, BVA, decision tables, state transitions, use-case flows, error guessing, pairwise) and its quality checklist (UI states, accessibility, localization, mobile lifecycle, network, permissions/hardware, concurrency, data, security input).
 
+**Anti-Scope-Creep & Measurability Rules (Crucial for Review-Readiness)**:
+1. **Scope Discipline**: Non-functional scenarios (network interruption, accessibility, concurrency, app lifecycle) must only be derived if relevant to the stated architecture/AC. Limit unrequested `derived` edge scenarios to high-impact risks only (max 3-5 derived per feature); do not flood the feature with speculative non-functional suites that clutter core AC review.
+2. **Deterministic & Measurable Outcomes Only**:
+   - Every scenario's `Then` assertion must specify a concrete, verifiable business outcome (status code, specific balance delta, exact UI banner presence/state).
+   - **Never write placeholder or policy-referencing assertions** such as "should handle the previous slug according to confirmed policy" or "should be handled safely per rules". If an outcome is unknown, write the deterministic assumption, tag `@assumption`, and raise the question in Phase 2.
+3. **Outline Cohesion**: Never mix disparate lifecycle actions (e.g., combining Create, Edit, and Delete into one parameterized Scenario Outline). Scenario Outlines are strictly for data-driven variations of the *same* single business flow.
+4. **Context-Appropriate Background Steps**: For Web API or headless tests, do not force UI browser navigation steps (e.g., `Given the user opens the web application`) if the scenarios interact at the HTTP/contract level. Match the background to the actual automation channel.
+5. **Clear Execution Tagging**: A scenario tagged `@blocked` must retain its intended operational tag (`@automated` or `@manual`) so CI filters can cleanly exclude it with `not @blocked` without causing syntactic contradiction. Ensure tag placement separates status tags clearly.
+
 Design Rigor Rules. Any number, limit or time below is **illustrative only**: use the value from the AC, and if the AC has none, it is an open question, not a default.
 1. **Deterministic Expected Outcome**:
    - Every scenario must have one clear, verifiable business outcome (supporting assertions on related state changes are fine, but never write ambiguous OR outcomes like "Disabled button / Alert").
@@ -163,10 +172,10 @@ Every scenario has one tag from each required row (Traceability and Type: at lea
 
 | Category | Tags |
 | :--- | :--- |
-| Traceability | `@REQ-<KEY>`, `@AC-<nn>` (one per AC covered), `@JIRA-<KEY>` |
+| Traceability | `@REQ-<KEY>`, `@AC-<nn>` (one per confirmed AC covered; omit `@AC-nn` on `derived`-only scenarios so unconfirmed ACs are never mistaken for confirmed coverage), `@JIRA-<KEY>` |
 | Module | `@feature-<module>` |
 | Priority | `@p0`, `@p1`, `@p2` |
-| Runner filter | `@smoke` (on `@p0`), `@regression` (on `@p1` and `@p2`) |
+| Runner filter | `@smoke` (on `@p0` `@automated`), `@regression` (on `@p1` and `@p2` `@automated`); omit on `@manual` (aligned with `scripts/lint-tags.ts`) |
 | Execution | `@automated`, `@manual` |
 | Platform | `@android`, `@ios`, `@web` |
 | Type | `@positive`, `@negative`, `@bva`, `@functional`, `@security`, `@permission`, `@lifecycle`, `@network`, `@concurrency`, `@localization`, `@accessibility` |

@@ -29,6 +29,9 @@ apps/*.aab
 apps/*.ipa
 apps/*.app
 
+# Skill Evaluation Outputs (Local A/B benchmark artifacts)
+eval/
+
 # OS & Editor
 .DS_Store
 Thumbs.db
