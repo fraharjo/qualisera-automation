@@ -25,7 +25,11 @@ function parseFeatureFiles(): TestCase[] {
   const testCases: TestCase[] = [];
   let tcCounter = 1;
 
+  const onlyArg = process.argv.find((a) => a.startsWith('--only='));
+  const onlyModules = onlyArg ? onlyArg.replace('--only=', '').split(',').map((s) => s.trim()) : null;
+
   const modules = fs.readdirSync(featuresBaseDir).filter((file) => {
+    if (onlyModules && !onlyModules.includes(file)) return false;
     return fs.statSync(path.join(featuresBaseDir, file)).isDirectory();
   });
 

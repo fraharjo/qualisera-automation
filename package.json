@@ -6,11 +6,6 @@
   "scripts": {
     "test": "npm run test:android",
     "test:android": "wdio run wdio.android.conf.ts --cucumberOpts.tags=\"@automated and not @manual and not @blocked\"",
-    "test:web": "wdio run wdio.web.conf.ts --cucumberOpts.tags=\"@automated and not @manual and not @blocked\"",
-    "test:web:smoke": "wdio run wdio.web.conf.ts --cucumberOpts.tags=\"@smoke and @web and not @manual and not @blocked\"",
-    "test:web:smoke:report": "npm run test:web:smoke && npm run report:open",
-    "test:web:regression": "wdio run wdio.web.conf.ts --cucumberOpts.tags=\"@regression and @web and not @manual and not @blocked\"",
-    "test:feature:product-discovery": "wdio run wdio.web.conf.ts --cucumberOpts.tags=\"@feature-product-discovery and @automated and @web and not @blocked\"",
     "test:smoke": "wdio run wdio.android.conf.ts --cucumberOpts.tags=\"@smoke and @android and not @manual and not @blocked\"",
     "test:regression": "wdio run wdio.android.conf.ts --cucumberOpts.tags=\"@regression and @android and not @manual and not @blocked\"",
     "test:feature:sample": "wdio run wdio.android.conf.ts --cucumberOpts.tags=\"@feature-sample and @automated and @android and not @blocked\"",
