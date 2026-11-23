@@ -3,8 +3,8 @@
 Copy this file to `requirements/<feature>.md` and fill it in. Quote acceptance criteria verbatim from the source; put your interpretation under Assumptions, not in the AC text.
 
 ## Metadata
-- Jira: `@JIRA-<KEY>` (e.g. `@JIRA-KTK-201`)
-- Requirement key (if the README mapping uses one): `@REQ-KTK-<nnn>`
+- Jira: `@JIRA-<KEY>` (e.g. `@JIRA-APP-201`)
+- Requirement key (if the README mapping uses one): `@REQ-<KEY>`
 - Module tag: `@feature-<module>`
 - Platform: Android | iOS | Web
 - Sources: <Jira key and fields used, Figma file and frame names, PRD section>

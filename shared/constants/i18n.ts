@@ -1,5 +1,5 @@
 /**
- * Centralized Type-Safe i18n Dictionary for Kotakin UI Elements
+ * Centralized Type-Safe i18n Dictionary for Application UI Elements
  * Single Source of Truth (SSoT) for all language variants (EN, ID, etc.)
  */
 export const i18n = {
@@ -45,7 +45,7 @@ export const i18n = {
     btnSettings: ['Settings', 'Pengaturan'],
     radioEnglish: ['Switch to English', 'English'],
     radioIndonesian: ['Switch to Indonesia', 'Switch to Indonesian', 'Bahasa Indonesia'],
-    btnAbout: ['About Kotakin', 'Tentang Kotakin'],
+    btnAbout: ['About App', 'Tentang Aplikasi'],
     btnCreateBackup: ['Create zip backup', 'Create backup', 'Buat cadangan zip'],
     btnRestoreBackup: ['Restore from zip backup', 'Restore from backup', 'Pulihkan dari cadangan zip'],
     versionText: ['Version', 'versi', 'Versi']

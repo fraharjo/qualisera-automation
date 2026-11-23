@@ -201,7 +201,8 @@ Every Gherkin scenario must adhere to standardized tags. Validate compliance any
 | :--- | :--- | :--- |
 | **Traceability** | `@REQ-<KEY>` | Maps scenario to requirement documentation key |
 | | `@AC-xx` | Maps scenario to Acceptance Criterion (e.g. `@AC-01`) |
-| | `@JIRA-<KEY>` | Maps scenario to Jira issue (e.g. `@JIRA-KTK-201`) |
+| | `@JIRA-<KEY>` | Maps scenario to Jira issue (e.g. `@JIRA-APP-201`) |
+| **Module** | `@feature-<module>` | Scopes scenario to a feature module (e.g. `@feature-sample`) |
 | **Execution Mode** | `@automated` | Executed by automated WebdriverIO runner |
 | | `@manual` | Executed via Manual Dashboard (`npm run test:manual:dashboard`) |
 | **Priority** | `@p0` | Critical path / blocker. **Always paired with `@smoke`** |
@@ -212,7 +213,7 @@ Every Gherkin scenario must adhere to standardized tags. Validate compliance any
 | **Platform** | `@android`, `@ios`, `@web` | Target execution environment |
 | **Technique** | `@positive`, `@negative`, `@bva`, `@functional` | Test design classification |
 | **Specialized** | `@security`, `@permission`, `@lifecycle`, `@network`, `@concurrency`, `@localization`, `@accessibility` | Specific conditions (offline network, biometric auth, multi-language) |
-| **Triage / Blocked** | `@blocked-by-question`, `@assumption` | Scenarios awaiting clarification from Product Owner |
+| **Status (Optional)** | `@blocked`, `@assumption` | `@blocked` awaits PO/testability resolution (excluded by `not @blocked`); `@assumption` runs on a stated assumption |
 
 ---
 

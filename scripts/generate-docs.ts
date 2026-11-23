@@ -40,7 +40,7 @@ function parseFeatureFiles(): TestCase[] {
       const content = fs.readFileSync(fullPath, 'utf-8');
       const lines = content.split('\n');
 
-      let currentReqKey = 'KTK-GEN';
+      let currentReqKey = 'APP-GEN';
       let featureTitle = mod;
       let currentTags: string[] = [];
       let inScenario = false;
@@ -121,7 +121,7 @@ function buildTestCase(
   const p0 = tags.includes('@p0');
   const p1 = tags.includes('@p1');
   const p2 = tags.includes('@p2');
-  const id = `TC-KTK-${String(num).padStart(3, '0')}`;
+  const id = `TC-${String(num).padStart(3, '0')}`;
   const isSmoke = tags.includes('@smoke');
   const isRegression = tags.includes('@regression');
   const isNegative = tags.includes('@negative') || scenarioTitle.toLowerCase().includes('negative') || scenarioTitle.toLowerCase().includes('fail') || scenarioTitle.toLowerCase().includes('error');
@@ -191,7 +191,7 @@ function generateMarkdown(testCases: TestCase[]): string {
   md += `| Application Module | Total Scenarios | Automation Status | Requirement Key |\n`;
   md += `| :--- | :---: | :---: | :--- |\n`;
   for (const [modName, list] of Object.entries(modulesGroup)) {
-    const req = list[0]?.reqKey || 'KTK-XXX';
+    const req = list[0]?.reqKey || 'APP-XXX';
     md += `| **${modName}** | ${list.length} | 🟢 100% Automated | \`@REQ-${req}\` |\n`;
   }
   md += `\n---\n\n`;
@@ -200,7 +200,7 @@ function generateMarkdown(testCases: TestCase[]): string {
   md += `| Requirement / Jira | AC Mapping | Module | Test Case ID | Scenario Title | Test Category | Priority |\n`;
   md += `| :--- | :--- | :--- | :--- | :--- | :--- | :---: |\n`;
   for (const tc of testCases) {
-    const reqDisplay = tc.reqKey.startsWith('KTK-') ? `@REQ-${tc.reqKey}` : `@JIRA-${tc.reqKey}`;
+    const reqDisplay = tc.reqKey.startsWith('APP-') ? `@REQ-${tc.reqKey}` : `@JIRA-${tc.reqKey}`;
     const acDisplay = tc.acId ? `\`@${tc.acId}\`` : '-';
     md += `| \`${reqDisplay}\` | ${acDisplay} | ${tc.module} | \`${tc.id}\` | ${tc.scenarioTitle} | ${tc.type} | ${tc.priority.split(' ')[0]} |\n`;
   }

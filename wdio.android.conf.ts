@@ -1,7 +1,7 @@
 import path from 'path';
 import { config as sharedConfig } from './wdio.shared.conf';
 
-const APP_ID = 'com.bmolab.kotakin';
+const APP_ID = process.env.ANDROID_APP_PACKAGE || 'com.example.app';
 
 export const config: WebdriverIO.Config = {
   ...sharedConfig,
@@ -23,7 +23,7 @@ export const config: WebdriverIO.Config = {
       platformName: 'Android',
       'appium:automationName': 'UiAutomator2',
       'appium:deviceName': 'Android Emulator',
-      'appium:app': process.env.ANDROID_APP_PATH || path.join(process.cwd(), './apps/kotakin.apk'),
+      'appium:app': process.env.ANDROID_APP_PATH || path.join(process.cwd(), './apps/app.apk'),
       'appium:appWaitActivity': '*',
       'appium:autoGrantPermissions': true,
       'appium:newCommandTimeout': 240

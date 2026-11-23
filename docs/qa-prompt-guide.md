@@ -221,7 +221,7 @@ Use this method when you have specific Jira AC text and manual test cases you wa
 Gunakan skill qualisera-test-generator untuk fitur [NAMA_FITUR] pada platform [Android / iOS / Web].
 
 --- SUMBER DATA ---
-Jira Ticket : [Contoh: JIRA-KTK-201] (teks tiket di-paste di bawah)
+Jira Ticket : [Contoh: JIRA-APP-201] (teks tiket di-paste di bawah)
 Figma Frame : [Screenshot terlampir]
 Manual Cases: [Path ke file CSV/Excel atau paste di sini]
 
@@ -239,7 +239,7 @@ Manual Cases: [Path ke file CSV/Excel atau paste di sini]
 Use the qualisera-test-generator skill for feature [FEATURE_NAME] on [Android / iOS / Web].
 
 --- SOURCES ---
-Jira Ticket : [e.g. JIRA-KTK-201] (ticket text pasted below)
+Jira Ticket : [e.g. JIRA-APP-201] (ticket text pasted below)
 Figma Frame : [Screenshots attached]
 Manual Cases: [Path to CSV/Excel or paste table here]
 
@@ -288,7 +288,7 @@ Use this when a test fails after an app update, element ID rename, UI redesign, 
 
 #### 🇮🇩 Indonesian
 ```text
-Skenario [@JIRA-KTK-201 / @AC-02] pada fitur [nama_fitur] mengalami failure di platform [Android / iOS / Web].
+Skenario [@JIRA-APP-201 / @AC-02] pada fitur [nama_fitur] mengalami failure di platform [Android / iOS / Web].
 
 --- ALLURE ERROR LOG ---
 [Paste pesan error atau stack trace Allure di sini]
@@ -301,7 +301,7 @@ Tolong periksa Screen Object dan Step Definition terkait. Temukan akar masalahny
 
 #### 🇬🇧 English
 ```text
-Scenario [@JIRA-KTK-201 / @AC-02] in feature [feature_name] failed on [Android / iOS / Web].
+Scenario [@JIRA-APP-201 / @AC-02] in feature [feature_name] failed on [Android / iOS / Web].
 
 --- ALLURE ERROR LOG ---
 [Paste error log or Allure stack trace here]
@@ -320,7 +320,7 @@ Every Gherkin scenario must use standardized tags so our automated test runners 
 
 | Need | Tag Pattern | Example | Explanation |
 | :--- | :--- | :--- | :--- |
-| **Traceability** | `@AC-<id>`<br>`@JIRA-<ticket>` | `@AC-01`<br>`@JIRA-KTK-201` | Links test directly to acceptance criteria and Jira tickets. |
+| **Traceability** | `@AC-<id>`<br>`@JIRA-<ticket>` | `@AC-01`<br>`@JIRA-APP-201` | Links test directly to acceptance criteria and Jira tickets. |
 | **Module** | `@feature-<name>` | `@feature-login` | Enables running a single feature: `npm run test:feature:login`. |
 | **Priority** | `@p0`, `@p1`, `@p2` | `@p0`<br>`@p1` | `@p0` = Blocker / Core path.<br>`@p1` = Major requirement.<br>`@p2` = Edge / Low priority. |
 | **Runner** | `@smoke`, `@regression` | `@smoke`<br>`@regression` | `@p0` is **always paired with `@smoke`**.<br>`@p1` and `@p2` are **paired with `@regression`**. |
@@ -365,7 +365,7 @@ For scenarios that require physical hardware, camera scanning, SMS OTP, or manua
 3. Open `http://localhost:3000` in your browser to:
    - View all `@manual` test cases synchronized live from `.feature` files.
    - Record execution status (`Passed`, `Failed`, `Blocked`, `Not Executed`).
-   - Link Jira bug tickets (e.g. `KTK-BUG-101`) on failure.
+   - Link Jira bug tickets (e.g. `APP-BUG-101`) on failure.
    - Attach screenshot evidence directly from clipboard or file upload.
    - Save session results to `reports/manual-results/manual-execution-results.json`.
 

@@ -73,9 +73,9 @@ await expect(paymentScreen.txtRemainingBalance).toHaveText(expect.stringContaini
 
 `generated/box/box.feature`:
 ```gherkin
-@feature-box @JIRA-KTK-101
+@feature-box @JIRA-APP-101
 Feature: Box Management
-  As a Kotakin user
+  As an app user
   I want to create and organize storage boxes
   So that I can keep track of my belongings
 

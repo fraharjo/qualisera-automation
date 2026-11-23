@@ -23,7 +23,7 @@ Watch for:
 - Stories whose AC is "works as designed": the design becomes the source, so read it too.
 - Bug tickets: the AC is the fix plus the regression. Generate a regression scenario for the original failure and for the nearest neighbors of it.
 
-Use the ticket key as `@JIRA-<KEY>` (for example `@JIRA-KTK-201`) and each AC as `@AC-<nn>`. If the README maps requirements to `@REQ-KTK-nnn`, keep that tag too. If the project uses a different key format, follow the README.
+Use the ticket key as `@JIRA-<KEY>` (for example `@JIRA-APP-201`) and each AC as `@AC-<nn>`. If the README maps requirements to `@REQ-<KEY>`, keep that tag too. If the project uses a different key format, follow the README.
 
 ## Figma
 
@@ -60,7 +60,7 @@ Return only:
 Source: <Jira key / Figma link / PRD>
 Platform: Android | iOS | Web
 Module tag: @feature-<module>
-Jira key: @JIRA-<KEY> (and @REQ-KTK-<nnn> if used by the README)
+Jira key: @JIRA-<KEY> (and @REQ-<KEY> if used by the README)
 
 ## Acceptance Criteria
 - AC-01: ...
