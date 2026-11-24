@@ -13,6 +13,7 @@
     "test:manual:dashboard": "ts-node scripts/manual-dashboard/server.ts",
     "lint:tags": "ts-node scripts/lint-tags.ts",
     "check:contracts": "ts-node scripts/check-contracts.ts",
+    "req:extract": "ts-node scripts/extract-requirement.ts",
     "check:generated": "ts-node scripts/check-generated.ts",
     "eval:init": "node scripts/eval-skill.mjs init",
     "eval:score": "node scripts/eval-skill.mjs",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/nodemailer": "^8.0.2",
+    "@types/pdf-parse": "^1.1.5",
     "@wdio/allure-reporter": "^8.32.0",
     "@wdio/appium-service": "^8.32.0",
     "@wdio/cli": "^8.32.0",
@@ -53,7 +55,9 @@
     "appium": "^2.5.0",
     "appium-uiautomator2-driver": "^3.0.0",
     "dotenv": "^16.4.5",
+    "mammoth": "^1.13.0",
     "nodemailer": "^10.6.0",
+    "pdf-parse": "^2.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

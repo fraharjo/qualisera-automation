@@ -45,6 +45,9 @@ Design-specific scenario prompts:
 - Convert each "shall/should/must" statement into a candidate AC, labeled `derived`.
 - Separate functional requirements from non-functional ones (performance, security, accessibility); non-functional items may need a different kind of test than a Gherkin scenario.
 - List unstated assumptions the text depends on.
+- **Multi-Format Document Intake**: When requirements arrive as `.pdf`, `.docx` (Word), `.html` (Confluence export), or `.csv`/`.json` in `requirements/inputs/<feature>/`:
+  * Use the built-in extractor: `npm run req:extract <path-to-file> --save` (powered by `scripts/extract-requirement.ts`).
+  * The tool converts raw binary formats into clean markdown (`.extracted.md`) with preserved tables and lists, avoiding manual copy-paste errors.
 
 ## When a source cannot be read
 

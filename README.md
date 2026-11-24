@@ -253,6 +253,13 @@ npm run check:generated -- generated/<feature>
 npm run typecheck
 
 # ==========================================
+# Requirement Extraction Utility
+# ==========================================
+# Extract clean text from PDF, Word (.docx), Confluence HTML, and spreadsheets
+npm run req:extract requirements/inputs/<feature>/
+npm run req:extract requirements/inputs/<feature>/PRD.pdf --save
+
+# ==========================================
 # Reporting & Manual Tracking
 # ==========================================
 # Generate and open Allure report dashboard in browser
