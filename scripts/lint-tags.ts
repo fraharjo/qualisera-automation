@@ -76,10 +76,10 @@ for (const { displayPath, fullPath } of targetFiles) {
       const hasPlatform = effectiveTags.includes('@android') || effectiveTags.includes('@ios') || effectiveTags.includes('@web');
       if (!hasPlatform) missing.push('Platform tag (@android, @ios, or @web)');
 
-      // Rule 4: Runner filter tag for automated tests (@smoke or @regression)
+      // Rule 4: Runner filter tag for automated tests (@smoke, @regression, or @e2e)
       if (effectiveTags.includes('@automated')) {
-        const hasRunner = effectiveTags.includes('@smoke') || effectiveTags.includes('@regression');
-        if (!hasRunner) missing.push('Runner filter tag (@smoke or @regression)');
+        const hasRunner = effectiveTags.includes('@smoke') || effectiveTags.includes('@regression') || effectiveTags.includes('@e2e');
+        if (!hasRunner) missing.push('Runner filter tag (@smoke, @regression, or @e2e)');
       }
 
       if (missing.length > 0) {

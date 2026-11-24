@@ -210,10 +210,12 @@ Every Gherkin scenario must adhere to standardized tags. Validate compliance any
 | | `@p2` | Edge case / cosmetic / minor. **Paired with `@regression`** |
 | **Runner Target** | `@smoke` | Fast sanity suite verifying deployment stability |
 | | `@regression` | Comprehensive test suite covering regression flows |
+| | `@e2e` | Multi-feature end-to-end user journeys |
 | **Platform** | `@android`, `@ios`, `@web` | Target execution environment |
 | **Technique** | `@positive`, `@negative`, `@bva`, `@functional` | Test design classification |
 | **Specialized** | `@security`, `@permission`, `@lifecycle`, `@network`, `@concurrency`, `@localization`, `@accessibility` | Specific conditions (offline network, biometric auth, multi-language) |
-| **Status (Optional)** | `@blocked`, `@assumption` | `@blocked` awaits PO/testability resolution (excluded by `not @blocked`); `@assumption` runs on a stated assumption |
+| **Channel (Optional)** | `@api` | Scenarios asserted at HTTP/contract level (no UI browser/device navigation in Background) |
+| **Status (Optional)** | `@blocked`, `@assumption`, `@derived` | `@blocked` awaits PO/testability resolution (excluded by `not @blocked`); `@assumption` runs on a stated assumption; `@derived` marks scenarios without a confirmed AC (max 5 per feature) |
 
 ---
 
@@ -229,6 +231,9 @@ npm run test:smoke
 # Run Android full regression suite
 npm run test:regression
 
+# Run Android end-to-end (E2E) journey suite
+npm run test:e2e
+
 # Run specific feature module
 npm run test:feature:sample
 
@@ -237,6 +242,12 @@ npm run test:feature:sample
 # ==========================================
 # Validate tag taxonomy adherence across all features
 npm run lint:tags
+
+# Audit unresolved UI contracts across Screen Objects
+npm run check:contracts
+
+# Validate generated test-design draft (tags, derived cap, placeholders, matrix sync)
+npm run check:generated -- generated/<feature>
 
 # Check TypeScript syntax and compilation integrity
 npm run typecheck
@@ -322,7 +333,11 @@ The framework includes a built-in **HTML Email Reporter** for automated post-tes
 | `error TS2304: Cannot find name '$'` in IDE | IDE Language Server hasn't indexed WebdriverIO global definitions. | Ensure `tsconfig.json` includes `@wdio/globals/types` in `types`, or import explicitly: `import { $, $$, browser } from '@wdio/globals';`. |
 
 > [!NOTE]
-> **Smart Contract Locators Note**: `this.contract(elementId)` in `BaseScreen` targets `[data-testid="id"]` for Web and `~id` for Mobile. For existing or third-party applications without QA test IDs, use standard native locators (`$`, `~accessibilityId`, `resource-id`).
+> **Smart Contract Locators & Self-Healing Reconciliation**:
+> - `this.contract(elementId)` in `BaseScreen` targets `[data-testid="id"]` for Web and `~id` for Mobile (`content-desc` on Android / `accessibilityIdentifier` on iOS).
+> - **Initial Run**: Elements lacking stable IDs are wrapped in `this.contract('screen-element-type')` and cataloged in an actionable checklist for developer testability handoff.
+> - **Build Reconciliation**: On new builds, testers can run `npm run check:contracts`, trigger auto-scan to reconcile contracts from live UI hierarchy dumps, or provide selectors directly in conversational chat.
+> - **Element Diagnosis**: The framework categorizes missing elements into `TESTABILITY GAP` (visible on screen but missing ID), `POTENTIAL DEFECT` (absent from UI tree), `CONDITIONAL / STANDBY` (dynamic error/toast/modal), or `TIMING MISMATCH`.
 
 ---
 

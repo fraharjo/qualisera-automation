@@ -1,9 +1,13 @@
+---
+trigger: always_on
+---
+
 # Skill Regression Eval Guard (`qualisera-test-generator`)
 
 Whenever you edit `.agents/skills/qualisera-test-generator/SKILL.md` or any file under `.agents/skills/qualisera-test-generator/references/`:
 
-1. **Automatically run the regression evaluation** defined in `.agents/skills/qualisera-test-generator/evals/golden-suite.md` before declaring the skill change complete (unless the user explicitly says to skip evals).
-2. Run all 3 Golden Benchmark Cases in parallel using read-only `research` subagents that strictly follow `SKILL.md` (Phases 1–5):
+1. **Automatically remind the user and ask for confirmation** before running the regression evaluation defined in `.agents/skills/qualisera-test-generator/evals/golden-suite.md` (do not launch the eval subagents without user confirmation unless the user explicitly asked to run evals; skip the reminder if the user explicitly asked to skip evals). Note briefly whether the change is substantive (recommended to run) or minor typo/wording (optional).
+2. **Once the user confirms**, run all 3 Golden Benchmark Cases in parallel using read-only `research` subagents that strictly follow `SKILL.md` (Phases 1–5):
    - **Case 1: SauceDemo / Swag Labs (`EXT-001`)** — Web login access controls (`locked_out_user`), error dismissal, and checkout mandatory fields/completion.
    - **Case 2: RealWorld Conduit (`EXT-002`)** — Web complex article CRUD, dynamic slug updates on title changes, and JWT ownership/IDOR authorization (`401`/`403`).
    - **Case 3: OWASP Secure Password Reset (`EXT-003`)** — Android anti-account enumeration, 15-minute token expiry BVA, password complexity, and multi-device session invalidation.
