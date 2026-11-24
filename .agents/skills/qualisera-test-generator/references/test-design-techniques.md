@@ -24,6 +24,11 @@ For every limit, test just outside, on, and just inside it.
 
 Remember that "length" depends on what is counted. Check how the requirement counts characters: emoji and combining characters can be multiple code units, and trailing spaces may or may not be trimmed before counting. If the AC does not say, that is an open question, not a guess.
 
+### Pair Boundary Rule for Rolling & Window Limits
+Whenever a window, rolling time limit (e.g. past 2 years / 24 months), or date cap exists, split into two distinct paired scenarios:
+1. **Inside Boundary (Threshold - 0)**: Record at the exact innermost valid limit (e.g. Month 24) -> MUST BE INCLUDED / ACCEPTED.
+2. **Outside Boundary (Threshold + 1)**: Record one step beyond the limit (e.g. Month 25) -> MUST BE EXCLUDED / REJECTED.
+
 ## 3. Decision tables
 
 Use when behavior depends on a combination of conditions (permission granted/denied times device state times user role). List the conditions as columns, enumerate the meaningful combinations, and record the expected action for each. Collapse rows that behave identically and say so.
@@ -46,11 +51,18 @@ For each main flow, cover: the main success path, each alternative path in the r
 Use experience-based prompts to find what the requirement forgot:
 
 - Duplicates (same name twice, same item added twice).
-- Case and whitespace differences (`Box`, `box`, ` box `).
+- Case and whitespace differences (`Item`, `item`, ` item `).
 - Rapid repeated actions (double tap, tap during loading).
 - Leaving the screen with unsaved input.
 - Very long text, very many items, zero items.
 - Special content: emoji, right-to-left text, accented characters, markup-like or script-like strings, newline characters. These check safe handling and correct display, not attack technique.
+
+### UI Widget & State Mutation Heuristics
+- **Radio Button Mutability**: Tap an already selected radio button (must remain selected, not unexpectedly deselect).
+- **Pill / Chip / Tab Group Switch**: Switching categories or year chips dynamically reloads dependent lists and resets or re-evaluates active selections and submit button states.
+- **Post-Success Mutation**: Changing input or period selections after a success toast/banner (does the success banner immediately dismiss or persist?).
+- **Duplicate Actions**: Submitting or downloading the exact same entity/file twice (overwrite behavior, duplicate file naming `(1)`, or duplicate banner display).
+- **Empty Search/Filter in Populated Datasets**: Applying an on-screen filter or search query that returns zero results on a populated screen (is the primary action/download button still visible or hidden?).
 
 ## 7. Pairwise (only when many independent parameters)
 
@@ -72,18 +84,18 @@ Mark each item as covered, not applicable (with a reason), or a gap.
 
 ## Worked example (short)
 
-AC-03: "A box name must be 1 to 50 characters. The Save button saves the box."
+AC-03: "An item name must be 1 to 50 characters. The Save button saves the item."
 
 | ID | Bucket | Technique | Scenario |
 | :--- | :--- | :--- | :--- |
-| BOX-P01 | Positive | EP | Save a box with a typical name |
-| BOX-E01 | Edge | BVA | Name with exactly 1 character is saved |
-| BOX-E02 | Edge | BVA | Name with exactly 50 characters is saved |
-| BOX-N01 | Negative | BVA | Name with 51 characters is rejected with a clear message |
-| BOX-N02 | Negative | EP | Empty name cannot be saved |
-| BOX-N03 | Negative | EP | Whitespace-only name cannot be saved |
-| BOX-E03 | Edge | Error guessing | Name with emoji and accented characters is saved and displayed correctly |
-| BOX-E04 | Edge | Error guessing | Duplicate name behavior (open question if the AC is silent) |
-| BOX-E05 | Edge | State transition | App is backgrounded while the name field is filled; input is kept on return |
+| ITEM-P01 | Positive | EP | Save an item with a typical name |
+| ITEM-E01 | Edge | BVA | Name with exactly 1 character is saved |
+| ITEM-E02 | Edge | BVA | Name with exactly 50 characters is saved |
+| ITEM-N01 | Negative | BVA | Name with 51 characters is rejected with a clear message |
+| ITEM-N02 | Negative | EP | Empty name cannot be saved |
+| ITEM-N03 | Negative | EP | Whitespace-only name cannot be saved |
+| ITEM-E03 | Edge | Error guessing | Name with emoji and accented characters is saved and displayed correctly |
+| ITEM-E04 | Edge | Error guessing | Duplicate name behavior (open question if the AC is silent) |
+| ITEM-E05 | Edge | State transition | App is backgrounded while the name field is filled; input is kept on return |
 
 Triage: P01 and N02 become `@p0 @smoke`; N01, N03, E01, E02, E03 become `@p1 @regression`; pure stress/extreme cases become `@p2 @regression`; E04 is blocked until the duplicate rule is defined; E05 is `@p2 @automated @lifecycle` if the runner can background the app.

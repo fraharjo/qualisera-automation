@@ -779,8 +779,8 @@
     let currentTab = 'overview';
 
     // Global session config in localStorage
-    const savedTester = localStorage.getItem('nexus_tester_name') || 'Fadli Raharjo';
-    const savedDevice = localStorage.getItem('nexus_tester_device') || 'Physical Android Device';
+    const savedTester = localStorage.getItem('qualisera_tester_name') || 'Fadli Raharjo';
+    const savedDevice = localStorage.getItem('qualisera_tester_device') || 'Physical Android Device';
 
     async function loadData() {
       // Set session UI
@@ -801,11 +801,11 @@
     }
 
     function onGlobalTesterChange(val) {
-      localStorage.setItem('nexus_tester_name', val.trim());
+      localStorage.setItem('qualisera_tester_name', val.trim());
     }
 
     function onGlobalDeviceChange(val) {
-      localStorage.setItem('nexus_tester_device', val.trim());
+      localStorage.setItem('qualisera_tester_device', val.trim());
     }
 
     function switchTab(tab) {

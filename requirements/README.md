@@ -17,7 +17,7 @@ requirements/
 The names match `generated/<feature>/` and `features/<feature>/`, so one feature keeps one name end to end. Files starting with `_` are templates or examples and are never test sources.
 
 ## How to Use with AI Skills:
-Copy `_template.md` to `requirements/box-sharing.md` and fill it in (e.g., `requirements/box-sharing.md`), then instruct the agent:
+Copy `_template.md` to `requirements/sample-feature.md` and fill it in (e.g., `requirements/sample-feature.md`), then instruct the agent:
 ```text
-"Use the nexus-test-generator skill to design test scenarios based on requirements/box-sharing.md targeting the Android platform, and save draft outputs to generated/box-sharing/"
+"Use the qualisera-test-generator skill to design test scenarios based on requirements/sample-feature.md targeting the Android platform, and save draft outputs to generated/sample-feature/"
 ```

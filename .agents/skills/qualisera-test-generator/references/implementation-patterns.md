@@ -71,29 +71,29 @@ await expect(paymentScreen.txtRemainingBalance).toHaveText(expect.stringContaini
 
 ## Few-shot example
 
-`generated/box/box.feature`:
+`generated/item/item.feature`:
 ```gherkin
-@feature-box @JIRA-APP-101
-Feature: Box Management
+@feature-item @JIRA-APP-101
+Feature: Item Management
   As an app user
-  I want to create and organize storage boxes
-  So that I can keep track of my belongings
+  I want to create and organize inventory items
+  So that I can keep track of my catalog
 
   @AC-01 @p0 @smoke @automated @android @functional
-  Scenario: Create a box with valid details
-    Given the user is on the "My Stash" dashboard
-    When the user opens the New Box form
-    And the user fills the box name with "Kitchen Box" and description "Utensils"
-    And the user submits the box creation form
-    Then the box "Kitchen Box" should be displayed on the dashboard
+  Scenario: Create an item with valid details
+    Given the user is on the item catalog dashboard
+    When the user opens the New Item form
+    And the user fills the item name with "Wireless Mouse" and description "Electronics"
+    And the user submits the item creation form
+    Then the item "Wireless Mouse" should be displayed on the dashboard
 
   @AC-02 @p1 @regression @automated @android @negative @bva
-  Scenario Outline: Reject an invalid box name
-    Given the user is on the "My Stash" dashboard
-    When the user opens the New Box form
-    And the user fills the box name with "<name>" and description "Invalid Test"
-    And the user submits the box creation form
-    Then the user should remain on the New Box form
+  Scenario Outline: Reject an invalid item name
+    Given the user is on the item catalog dashboard
+    When the user opens the New Item form
+    And the user fills the item name with "<name>" and description "Invalid Test"
+    And the user submits the item creation form
+    Then the user should remain on the New Item form
 
     Examples:
       | name                                               |
@@ -103,30 +103,30 @@ Feature: Box Management
 ```
 Replace the placeholder rows with real values or a data helper; never leave empty Examples rows that look like data.
 
-`generated/box/box.screen.ts`:
+`generated/item/item.screen.ts`:
 ```typescript
 import { BaseScreen } from '../../shared/pages/base.screen';
 import { i18n } from '../../shared/constants/i18n';
 
-class BoxScreen extends BaseScreen {
-  get btnNewBox() { return this.getByI18n(i18n.dashboard.btnNewBox); }
-  get inputBoxName() { return $('~Box name'); } // verified from UI dump
+class ItemScreen extends BaseScreen {
+  get btnNewItem() { return this.getByI18n(i18n.dashboard.btnNewItem); }
+  get inputItemName() { return $('~Item name'); } // verified from UI dump
 
-  async openNewBoxForm(): Promise<void> { await this.click(this.btnNewBox); }
-  async fillBoxForm(name: string, description: string): Promise<void> {
-    await this.setValue(this.inputBoxName, name);
+  async openNewItemForm(): Promise<void> { await this.click(this.btnNewItem); }
+  async fillItemForm(name: string, description: string): Promise<void> {
+    await this.setValue(this.inputItemName, name);
     if (description) await this.setValue(this.inputDescription, description);
   }
 }
-export default new BoxScreen();
+export default new ItemScreen();
 ```
 
-`generated/box/box.steps.ts`: only new steps (reuse existing ones first):
+`generated/item/item.steps.ts`: only new steps (reuse existing ones first):
 ```typescript
 import { When } from '@cucumber/cucumber';
-import boxScreen from './box.screen';
+import itemScreen from './item.screen';
 
-When('the user opens the New Box form', async () => { await boxScreen.openNewBoxForm(); });
+When('the user opens the New Item form', async () => { await itemScreen.openNewItemForm(); });
 ```
 Adjust import paths to the promoted location (`features/<feature>/pages/`) during promotion.
 

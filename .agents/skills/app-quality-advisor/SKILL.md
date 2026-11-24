@@ -144,7 +144,7 @@ Tracker-agnostic fields:
 
 ### Section 6: Requirement and test suggestions
 
-Turn confirmed gaps into inputs for the test generator: proposed acceptance criteria written so they can be dropped into the `requirements/` PRD for the feature, and the scenarios that would protect them (with suggested technique, e.g. EP, BVA, state transition, as used by `nexus-test-generator`). Hand over open questions the same way. This closes the loop from audit back to test design.
+Turn confirmed gaps into inputs for the test generator: proposed acceptance criteria written so they can be dropped into the `requirements/` PRD for the feature, and the scenarios that would protect them (with suggested technique, e.g. EP, BVA, state transition, as used by `qualisera-test-generator`). Hand over open questions the same way. This closes the loop from audit back to test design.
 
 ## 6. Boundaries
 

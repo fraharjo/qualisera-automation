@@ -56,10 +56,12 @@ A `Background` must match the channel of every scenario it covers. Never force `
 Ideate first, judge testability second. Deciding "can we automate this?" early silently deletes the scenarios that find the most bugs. Feasibility is applied in Phase 4, never before.
 
 ### Phase 1 - Normalize the requirement
-Numbered AC list (`AC-01`...), original wording, source recorded per AC. If there are no explicit ACs, derive candidates labeled `derived` (not confirmed coverage). Per AC note actors, preconditions, trigger, expected outcome and numbers (limits, timeouts).
+Numbered AC list (`AC-01`...), original wording, source recorded per AC. 
+- Strict Source Attribution: Use `@AC-nn` exclusively for criteria explicitly stated in the source ticket/AC text. Flow descriptions are labeled `[FLOW-xx]`, and visual mockup elements are labeled `[DESIGN-xx]` or `[SCREENSHOT-xx]`. Never invent new `@AC-nn` numbers for derived or visual discoveries. If there are no explicit ACs, derive candidates labeled `derived` (not confirmed coverage). Per AC note actors, preconditions, trigger, expected outcome and numbers (limits, timeouts).
 
 ### Phase 2 - Review the requirement (shift-left)
 Look for **ambiguity** (vague words, undefined limits), **gaps** (no error/empty/loading state, permissions, offline, interruption, localized copy), **conflicts** (AC vs design) and **untestable** statements.
+- **Visual Evidence & Anomaly Scan**: Whenever designs (Figma, screenshots, UI dumps) are provided, scan for visual anomalies, broken assets/mock strings, localization mismatches, sorting contradictions, and unwritten business limits. Output an **Observations / Potential Defects** table.
 
 1. **Never reject thin input.** Generate baseline scenarios for the clear parts. For each gap, choose the status tag with this rule:
 
@@ -69,19 +71,22 @@ Look for **ambiguity** (vague words, undefined limits), **gaps** (no error/empty
    | Two or more valid outcomes contradict each other (old URL: 404 or redirect?), or no safe default exists | `@blocked` | Concrete `Then` for the `(Recommended)` option plus `# Open question: <question>; alternatives: <...>` |
 
    Both cases need a concrete, verifiable `Then`. A placeholder such as "the system handles it according to the agreed policy" can be neither automated nor reviewed, while a concrete-but-flagged outcome lets the reviewer accept or flip it in seconds.
-2. **Separate facts, assumptions and open questions.** Never write an unconfirmed assumption as a fact. Assert only the observable business outcome (e.g. "exactly 1 transaction is processed") and never invent implementation details (dialog wording, date formats, widget types). When an assertion needs literal text, take it from the first source that applies: (a) literal text in the AC/PRD/Figma, referenced through the i18n source and never hard-coded in a step; (b) an existing i18n entry; (c) otherwise assert the business state (balance changed, status value, record exists), tag `@assumption`, and add the missing copy to the open questions. State the target application context; for offline or local-only apps do not invent cloud/account constraints.
+2. **Separate facts, assumptions and open questions.** Never write an unconfirmed assumption as a fact. Never label unconfirmed AI hypotheses as "Confirmed by Product Owner" without explicit user confirmation in chat. Assert only the observable business outcome (e.g. "exactly 1 transaction is processed") and never invent implementation details (dialog wording, date formats, widget types). When an assertion needs literal text, take it from the first source that applies: (a) literal text in the AC/PRD/Figma, referenced through the i18n source and never hard-coded in a step; (b) an existing i18n entry; (c) otherwise assert the business state (balance changed, status value, record exists), tag `@assumption`, and add the missing copy to the open questions. State the target application context; for offline or local-only apps do not invent cloud/account constraints.
 3. **Bundle questions.** Ask at most 3-5 questions in one session via `ask_question` (or a prioritized numbered list if unavailable), ranked by business risk, each with options and `(Recommended)` on the best technical choice. Never ask one question per turn. In `batch` mode do not ask: take every `(Recommended)` option as the working assumption, apply the tag rule above, and record all questions in the matrix.
 
 ### Phase 3 - Ideate the scenario pool
 Per AC list Positive / Negative / Edge scenarios regardless of automation feasibility, using [references/test-design-techniques.md](references/test-design-techniques.md) and its quality checklist (UI states, accessibility, localization, mobile lifecycle, network, permissions/hardware, concurrency, data, security input).
 
 Rules that keep the pool reviewable:
-1. **Derived scenarios are rare and labeled.** A scenario is `derived` only if its expected behavior has no basis in a confirmed AC (cross-cutting non-functional checks, speculative flows, scenarios from a `derived` AC). Edge or negative variants of a confirmed AC (whitespace, bounds, encoding, duplicates, authorization, a gap inside that AC) are **not** derived: tag them with their AC. Tag derived scenarios `@derived`, omit `@AC-nn`, and keep them to **5 per feature**, highest risk first. The cap exists because speculative suites bury the core AC review.
+1. **Derived scenarios are rare, labeled, and business-focused.** A scenario is `derived` only if its expected behavior has no basis in a confirmed AC (cross-cutting non-functional checks, speculative flows, scenarios from a `derived` AC). Edge or negative variants of a confirmed AC (whitespace, bounds, encoding, duplicates, authorization, a gap inside that AC) are **not** derived: tag them with their AC. Tag derived scenarios `@derived`, omit `@AC-nn`, and keep them to **5 per feature**, highest risk first. Prioritize derived slots for high-impact business data risks (filter independence, non-successful status coverage, document integrity) rather than generic low-risk checks (app backgrounding).
 2. **Every `Then` is deterministic and measurable**: a status code, a concrete state change, an exact element state or text via i18n. Ban hedged or policy-referencing outcomes ("handled safely", "as defined", "without corruption") and ambiguous "A or B" outcomes. If the outcome is unknown, apply the Phase 2 rule 1 table.
-3. **Outline cohesion.** A Scenario Outline varies data of one single business flow. Never put different lifecycle actions (create/edit/delete) behind an `<action>` parameter, since each action has different preconditions and assertions.
-4. **Background matches the channel** (see Channel decision).
-5. **`@blocked` keeps its execution tag** (`@automated` or `@manual`) so CI can exclude it with `not @blocked` without contradicting the other tags.
-6. **Apply design-rigor rules by applicability**, not blanket. The table says when each applies; details are in [references/design-rigor-rules.md](references/design-rigor-rules.md). When a rule does not apply, write `N/A: <reason>` in the matrix instead of forcing scenarios. Numbers, limits and times in the reference are illustrative: take values from the AC, and if the AC has none it is an open question, not a default.
+3. **Depth-Based Coverage Verdict & Atomic Assertions**: A coverage verdict of "Full" requires verifying the substantive business outcome (e.g. file content, database record persistence, calculated state), not mere surface triggers (e.g. clicking a button and seeing a toast). On data export/download ACs, "Full" requires verifying the integrity of the exported data. Break complex document or entity validations into atomic scenarios (metadata, columns, data parity, formatting, pagination) so automated CI failures isolate exact faults immediately.
+4. **Dataset Cataloging (`DS-01`, `DS-02`...)**: In Phase 5, assign explicit dataset IDs to each required fixture profile under Testability Requests (e.g. `DS-01` empty state, `DS-02` single record, `DS-03` gap data, `DS-04` multi-page volume, `DS-05` clock boundary). Link scenarios to their required dataset in notes.
+5. **Open Question Placeholders**: When open technical questions affect system behavior (e.g. 5xx server error, duplicate actions, state changes post-success), create explicit edge scenario placeholders in the pool tagged `@blocked` or `@assumption` and linked to their Open Question ID.
+6. **Outline cohesion.** A Scenario Outline varies data of one single business flow. Never put different lifecycle actions (create/edit/delete) behind an `<action>` parameter, since each action has different preconditions and assertions.
+7. **Background matches the channel** (see Channel decision).
+8. **`@blocked` keeps its execution tag** (`@automated` or `@manual`) so CI can exclude it with `not @blocked` without contradicting the other tags.
+9. **Apply design-rigor rules by applicability**, not blanket. The table says when each applies; details are in [references/design-rigor-rules.md](references/design-rigor-rules.md). When a rule does not apply, write `N/A: <reason>` in the matrix instead of forcing scenarios. Numbers, limits and times in the reference are illustrative: take values from the AC, and if the AC has none it is an open question, not a default.
 
    | Rule | Applies when | Read the reference? |
    | :--- | :--- | :--- |
@@ -92,6 +97,8 @@ Rules that keep the pool reviewable:
    | Transaction/payment | money moves or irreversible server records are created | yes + [references/payment-rules.md](references/payment-rules.md) |
    | State transition / lockout | the AC defines a state machine or lockout | yes |
    | Information leakage | authentication or credential flows | yes |
+   | Data export / document generation | application downloads or exports PDF, CSV, Excel, TXT, or JSON reports | yes |
+   | Overlays, modals & navigation lifecycle | UI features dialogs, bottom sheets, drawers, modals, or multi-hop flows | yes |
    | Non-functional (network, concurrency, lifecycle, accessibility) | relevant to the architecture; counts toward the derived cap when not tied to an AC | yes |
 
 Pool columns: ID (`P01`, `N03`, `E05`), AC, bucket, technique, channel, description, risk (H/M/L), why it matters. Cut only exact duplicates here.
@@ -118,7 +125,7 @@ In `design` mode, present the matrix and open questions and stop until the user 
 Write to `generated/<feature>/`: `test-matrix.md`, `<feature>.feature`, then by channel `<feature>.screen.ts` (extends `BaseScreen`) and/or the API helper, and `<feature>.steps.ts` (only steps that do not exist yet). Patterns and a worked example: [references/implementation-patterns.md](references/implementation-patterns.md).
 
 Gherkin rules:
-- Declarative business language ("the user saves a box named 'Books'", not "taps Save").
+- Declarative business language ("the user saves an item named 'Gadget'", not "taps Save").
 - One behavior and one clear outcome per scenario; `Background` only for shared preconditions of the same channel.
 - Scenario-owned test data, no ordering dependencies or shared mutable state.
 - Quote string values inside Scenario Outline Examples when whitespace matters, because Gherkin trims unquoted table cells.

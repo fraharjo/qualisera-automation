@@ -14,30 +14,30 @@ export const i18n = {
     gotIt: ['Got it!', 'Mengerti!']
   },
   dashboard: {
-    header: ['My Stash', 'Simpananku', 'Kotak Saya'],
-    btnNewBox: ['New box', 'Kotak baru'],
+    header: ['My Stash', 'Simpananku'],
+    btnNewItem: ['New item', 'Item baru'],
     btnScan: ['Scan', 'Pindai'],
-    searchPlaceholder: ['Search boxes or items...', 'Cari kotak atau barang...'],
+    searchPlaceholder: ['Search items...', 'Cari barang...'],
     clearSearch: ['Clear search', 'Hapus pencarian'],
     noResults: ['No results', 'Tidak ada hasil'],
     noItemsMatch: ['No items match your search.', 'Tidak ada barang yang cocok dengan pencarian Anda.']
   },
-  box: {
-    formTitleNew: ['New Box', 'Create box', 'Buat Kotak Baru', 'Buat kotak'],
-    formTitleEdit: ['Edit Box', 'Edit box', 'Ubah Kotak', 'Ubah kotak'],
-    inputName: ['Box name', 'Nama kotak'],
+  itemForm: {
+    formTitleNew: ['New Item', 'Create item', 'Buat Item Baru', 'Buat item'],
+    formTitleEdit: ['Edit Item', 'Edit item', 'Ubah Item', 'Ubah item'],
+    inputName: ['Item name', 'Nama item'],
     inputDescription: ['Description', 'Deskripsi'],
     inputLocation: ['Location', 'Lokasi'],
-    btnCreateBox: ['Create box', 'Create Box', 'Buat kotak'],
+    btnCreateItem: ['Create item', 'Create Item', 'Buat item'],
     btnAddNewItem: ['Add new item', 'Tambah barang baru'],
     btnShowQRCode: ['Show QR code', 'Tampilkan kode QR'],
     btnExpandActions: ['Expand actions', 'Buka menu aksi'],
     btnCollapseActions: ['Collapse actions', 'Tutup menu aksi'],
     btnAddToFavorites: ['Add to favorites', 'Tambah ke favorit'],
     btnRemoveFromFavorites: ['Remove from favorites', 'Hapus dari favorit'],
-    btnEditBox: ['Edit box', 'Ubah kotak'],
-    btnDeleteBox: ['Delete box', 'Hapus kotak'],
-    dialogDeleteTitle: ['Delete Box?', 'Hapus Kotak?'],
+    btnEditItem: ['Edit item', 'Ubah item'],
+    btnDeleteItem: ['Delete item', 'Hapus item'],
+    dialogDeleteTitle: ['Delete Item?', 'Hapus Item?'],
     nameRequiredAlert: ['Name required', 'Please enter a name', 'Nama wajib diisi']
   },
   settings: {
